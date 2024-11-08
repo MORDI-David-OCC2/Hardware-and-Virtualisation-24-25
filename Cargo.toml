@@ -11,3 +11,11 @@ panic-halt = "0.2.0"
 
 [profile.release]
 panic = "abort"
+codegen-units = 1 # Slower compilation, faster program
+lto = true # Maximum linker optimisation
+opt-level = "s" # Optimize code for smallest binary size
+
+[profile.dev]
+panic = "abort"
+lto = true
+opt-level = "s"
