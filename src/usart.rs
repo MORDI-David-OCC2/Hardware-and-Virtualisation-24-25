@@ -1,5 +1,5 @@
-#![no_std]
 use core::ptr::{read_volatile, write_volatile};
+
 pub fn init_uart_reg()
 
 {
