@@ -1,5 +1,6 @@
 [package]
 name = "TP1"
+authors = ["David Mordi, Ines Kaci, Louis-Marie Matthews"]
 version = "0.1.0"
 edition = "2021"
 
