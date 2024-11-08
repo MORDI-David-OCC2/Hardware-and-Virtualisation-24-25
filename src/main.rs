@@ -3,6 +3,7 @@
 #![no_std]
 #![no_main]
 
+//------------------------------------------Partie utile pour le rendu 1-----------------------------------------------
 /*
 /*use core::panic::PanicInfo;*/
 use cortex_m_rt::entry;
@@ -10,36 +11,6 @@ use cortex_m_semihosting::{debug, hprintln};
 use panic_halt as _;
 mod gpio; //Import du module gpio ( fichier gpio.rs)
 */
-
-//Ajout test 7/11/24
-
-
-extern crate panic_halt; // Gestionnaire de panique (peut être différent selon votre projet)
-mod usart;
-
-
-#[no_mangle]
-fn main() {
-    usart::init_uart_reg(); // Initialisation de l'USART
-
-    // Envoi d'un message
-    usart::send_message("Hello, USART!");
-    
-    loop {
-        // Boucle infinie pour garder le programme en cours d'exécution
-        //partie ajouté le 08/11/24 pour receptionner l'octet et le réemettre 
-        let received_byte = usart::receive_byte();
-        // Envoi d'un message indiquant que l'octet a été reçu
-        usart::send_message("Recu : ");
-        usart::transmit_byte(received_byte);
-    }
-}
-
-
-//fin ajout test 7/11/24
-
-
-
 /*#[panic_handler]
 fn panic(_panic: &PanicInfo) -> ! {
     loop {}
@@ -57,6 +28,33 @@ fn main() -> ! {
         
     
 }*/
+
+//--------------------------------Test des fonctions pour le rendu 2------------------------------------------
+extern crate panic_halt; // Gestionnaire de panique 
+mod usart;
+
+
+#[no_mangle]
+fn main() {
+    //Initialisation de l'USART
+    usart::init_uart_reg(); 
+
+    // Envoi d'un message
+    usart::send_message("Hello, USART!");
+    
+    loop {
+        
+        //Réception d'un octet et réemission de l'octet avec un message pour indiquer la bonne reception
+
+        let received_byte = usart::receive_byte();
+        //Envoi d'un message indiquant que l'octet a été reçu
+        usart::send_message("Recu : ");
+        usart::transmit_byte(received_byte);
+    }
+}
+
+
+
 
 
 
