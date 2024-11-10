@@ -1,8 +1,14 @@
 # Rust HAL
 
-## USART
+## Tester l’USART
 
 Pour un exemple d’utilisation de l’USART, lancer `cargo run --example usart` depuis un terminal, et `telnet localhost 5678` depuis un autre. Tous les messages que vous enverrez (avec la touche « Entrée ») vous seront retransmis.
+
+## Documentation
+
+Pour générer la documentation : `cargo doc`.
+
+Elle peut ensuite être trouvé dans le dossier `./target/avr-atmega328p/doc/tp1/index.html` (selon la target spécifiée).
 
 ## Organisation
 
