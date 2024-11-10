@@ -4,6 +4,8 @@
 
 Pour un exemple d’utilisation de l’USART, lancer `cargo run --example usart` depuis un terminal, et `telnet localhost 5678` depuis un autre. Tous les messages que vous enverrez (avec la touche « Entrée ») vous seront retransmis.
 
+Pour tester sur un autre matériel : `cargo run --example usart --target thumbv7m-none-eabi`.
+
 ## Documentation
 
 Pour générer la documentation : `cargo doc`.

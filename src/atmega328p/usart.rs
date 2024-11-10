@@ -58,7 +58,7 @@ impl Usart for Atmega328P {
             // Attente que le tampon de transmission soit vide
             while read_volatile(ADD_UCSR0A) & (1<<UDRE0)==0{}
             // Ecriture de l'octet dans le registre de transmission
-            write_volatile(ADD_UDR0,byte);
+            write_volatile(ADD_UDR0, byte);
         }
     }
 

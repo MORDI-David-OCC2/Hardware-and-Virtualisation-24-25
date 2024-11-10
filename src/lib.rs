@@ -6,4 +6,5 @@
 
 pub mod auto;
 pub mod atmega328p;
+pub mod cortex_m3;
 pub mod usart;
