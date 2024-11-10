@@ -6,8 +6,18 @@ use crate::usart::Usart;
 
 // Configuration des constantes
 
+// Paramètres de l’USART
 pub const FOSC: u32 = 1_843_200;  // fréquence
 pub const BAUD: u32 = 9_600; // taux de baud
+pub const UBRR: u32 = (FOSC/(16*BAUD))-1;
+
+// Séparation du registre en deux registres (haut et bas)
+pub const UBRR0_H: u8 = (UBRR >> 8u8) as u8;
+pub const UBRR0_L: u8 = (UBRR) as u8;
+
+// Configuration des registres pour le recepteur et l'emetteur
+pub const URBB0_B: u8 = (1<<RXCEN0) | (1<<TXEN0);
+pub const UBRR0_C: u8 = (1<<USBS0) | (3<<UCSZ00);
  
 pub const RXCEN0: u8 = 4; //récepteur
 pub const TXEN0: u8 = 3; //emetteur 
@@ -19,8 +29,8 @@ pub const USBS0: u8 = 3;
 // Adresses des registres liées à l'USART
 pub const ADD_UCSR0C: *mut u8 = 0xC2 as *mut u8;
 pub const ADD_UCSR0B: *mut u8 = 0xC1 as *mut u8;
-pub const ADD_UBRR0H: *mut u8 = 0xC5 as *mut u8;//usart br reg high
-pub const ADD_UBRR0L: *mut u8 = 0xC4 as *mut u8;//usart br reg low
+pub const ADD_UBRR0H: *mut u8 = 0xC5 as *mut u8; // usart br reg high
+pub const ADD_UBRR0L: *mut u8 = 0xC4 as *mut u8; // usart br reg low
 pub const ADD_UCSR0A: *mut u8 = 0xC0 as *mut u8;
 pub const UDRE0: u8 = 5;
 pub const ADD_UDR0: *mut u8 = 0xC6 as *mut u8;
@@ -32,24 +42,12 @@ impl Usart for Atmega328P {
     /// Initialisation de l'USART
     fn initialize(&self)
     {
-        // Configuration du registre du taux de baud
-        let ubrr=(FOSC/(16*BAUD))-1;
-
-        // Séparation du registre en deux registres (haut et bas)
-        let ubrr0h: u8 = (ubrr >> 8) as u8;
-        let ubrr0l: u8 = (ubrr) as u8;
-
-    
-        // Configuration des registres pour le recepteur et l'emetteur
-        let ucsr0b: u8 = (1<<RXCEN0) | (1<<TXEN0);
-        let ucsr0c: u8 = (1<<USBS0) | (3<<UCSZ00);
-
         // Ecriture des valeurs dans les registres
         unsafe {
-            write_volatile(ADD_UBRR0H, ubrr0h);
-            write_volatile(ADD_UBRR0L, ubrr0l);
-            write_volatile(ADD_UCSR0C, ucsr0c);
-            write_volatile(ADD_UCSR0B, ucsr0b);
+            write_volatile(ADD_UBRR0H, UBRR0_H);
+            write_volatile(ADD_UBRR0L, UBRR0_L);
+            write_volatile(ADD_UCSR0C, UBRR0_C);
+            write_volatile(ADD_UCSR0B, URBB0_B);
         }
     }
 
