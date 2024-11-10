@@ -4,5 +4,6 @@
 
 #![no_std]
 
+pub mod auto;
 pub mod atmega328p;
 pub mod usart;

@@ -4,13 +4,13 @@
 extern crate panic_halt; // Gestionnaire de panique
 extern crate tp1;
 
-use tp1::atmega328p::usart;
+use tp1::auto::usart;
 use tp1::usart::Usart;
 
 //--------------------------------Test des fonctions pour le rendu 2------------
 #[no_mangle]
 fn main() {
-    let hal = usart::Atmega328P {};
+    let hal = usart::get_usart();
 
     //Initialisation de l'USART
     hal.initialize(); 
