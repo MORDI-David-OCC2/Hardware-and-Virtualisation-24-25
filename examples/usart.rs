@@ -5,24 +5,27 @@ extern crate panic_halt; // Gestionnaire de panique
 extern crate tp1;
 
 use tp1::atmega328p::usart;
+use tp1::usart::Usart;
 
 //--------------------------------Test des fonctions pour le rendu 2------------
 #[no_mangle]
 fn main() {
+    let hal = usart::Atmega328P {};
+
     //Initialisation de l'USART
-    usart::init_uart_reg(); 
+    hal.initialize(); 
 
     // Envoi d'un message
-    usart::send_message("Hello, USART!");
+    hal.send_message("Hello, USART!");
     
     loop {
         
         //Réception d'un octet et réemission de l'octet avec un message pour indiquer la bonne reception
 
-        let received_byte = usart::receive_byte();
+        let received_byte = hal.receive_byte();
         //Envoi d'un message indiquant que l'octet a été reçu
-        usart::send_message("Recu : ");
-        usart::transmit_byte(received_byte);
+        hal.send_message("Recu : ");
+        hal.transmit_byte(received_byte);
     }
 }
 
