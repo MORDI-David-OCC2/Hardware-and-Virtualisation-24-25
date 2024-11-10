@@ -1,6 +1,25 @@
+# Rust HAL
+
+## USART
+
+Pour un exemple d’utilisation de l’USART, lancer `cargo run --example usart` depuis un terminal, et `telnet localhost 5678` depuis un autre. Tous les messages que vous enverrez (avec la touche « Entrée ») vous seront retransmis.
+
+## Organisation
+
+Le package contient une crate qui fournit un hal pour l’Atmega328P.
+
+L’organisation est la suivante :
+
+ - `.cargo/config.toml`, `Cargo.toml` et `rust-toolchain.toml` : contient la configuration automatique pour compiler et lancer le programme (choix de la toolchain, manière de lancer le programme, target, `core`…)
+ - `examples/usart.rs` : montre un exemple de l’utilisation d’USART avec notre bibliothèque.
+ - `avr-atmega328p.json` : contient la configuration personnalisée que nous utilisons pour l’Atmega328P.
+ - `src` : contient notre HAL sous forme de Crate library.
+
+## À propos
+
 Ce projet est fait par David Mordi, Inès Kaci et Louis-Marie Matthews, étudiants en OCC2 à l'ESILV.
 
-Il contient pour l'instant la première partie de notre HAL : le gpio.
+## Instructions de lancement sur Windows
 
 [CORRECTION GPIO] (Don't hesitate to remove this part)
 I couldn't compile ! When you make a project for the first time, I recommand you to use the ```cargo new your_project``` command.

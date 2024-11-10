@@ -1,5 +1,3 @@
-
-
 #![no_std]
 #![no_main]
 
@@ -15,7 +13,9 @@ mod gpio; //Import du module gpio ( fichier gpio.rs)
 
 
 extern crate panic_halt; // Gestionnaire de panique (peut être différent selon votre projet)
-mod usart;
+extern crate tp1;
+
+use tp1::atmega328p::usart;
 
 
 #[no_mangle]
