@@ -1,6 +1,9 @@
 
 [target.'cfg(target_arch = "avr")']
-runner = "qemu-system-avr -nographic -machine uno -bios target/avr-atmega328p/debug/tp1.elf  -serial tcp::5678,server=on,wait=on"
+runner = "qemu-system-avr -nographic -machine uno -bios target/avr-atmega328p/debug/examples/usart.elf  -serial tcp::5678,server=on,wait=on"
+
+[target.'cfg(target_arch = "arm")']
+runner = "qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -nographic -kernel target/thumbv7m-none-eabi/debug/examples/usart -serial tcp::5678,server=on,wait=on"
 
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
 # uncomment ONE of these three option to make `cargo run` start a GDB session
