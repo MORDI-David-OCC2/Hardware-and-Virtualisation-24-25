@@ -30,9 +30,9 @@ fn main() -> ! {
 }*/
 
 //--------------------------------Test des fonctions pour le rendu 2------------------------------------------
-extern crate panic_halt; // Gestionnaire de panique 
+//extern crate panic_halt; // Gestionnaire de panique 
 mod usart;
-
+/*
 
 #[no_mangle]
 fn main() {
@@ -52,6 +52,50 @@ fn main() {
         usart::transmit_byte(received_byte);
     }
 }
+*/
+//Test pour rendu 3 
+
+// Importations communes
+mod spi;
+use spi::{Spi, SpiImpl};
+
+#[cfg(target_arch = "avr")]
+use panic_halt as _; // Gestionnaire de panique pour ATmega328p
+
+#[cfg(target_arch = "arm")]
+use panic_halt as _; // Gestionnaire de panique pour Cortex-M7
+
+#[cfg(target_arch = "arm")]
+use cortex_m_rt::entry; // Point d'entrée pour Cortex-M7
+#[cfg(target_arch = "arm")]
+use cortex_m_semihosting::hprintln; // Debug via semihosting pour Cortex-M7
+
+// Point d'entrée pour les deux cibles
+#[cfg(target_arch = "avr")]
+#[no_mangle]
+pub extern "C" fn main() -> ! {
+    // Initialisation SPI pour ATmega328p
+    SpiImpl::init_master();
+    SpiImpl::transmit(0xAB);
+
+    // Boucle infinie
+    loop {}
+}
+
+#[cfg(target_arch = "arm")]
+#[entry]
+fn main() -> ! {
+    // Initialisation SPI pour Cortex-M7
+    SpiImpl::init_master();
+    SpiImpl::transmit(0xAB);
+
+    
+    //hprintln!("Octet transmis via SPI : 0xAB").unwrap();
+
+    // Boucle infinie
+    loop {}
+}
+
 
 
 
