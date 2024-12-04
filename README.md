@@ -1,5 +1,11 @@
 # Rust HAL
 
+## Installer les dépendances
+
+Pour tester le HAL, il est recommandé d’utiliser Docker avec l’image `gcc:latest`.
+
+Ensuite, depuis Debian, il suffit d’executer `setup.sh` pour installer les dépendences. Ce script installe notamment une version plus à jour d’`avr-gcc`.
+
 ## Tester l’USART
 
 Pour un exemple d’utilisation de l’USART, lancer `cargo run --example usart` depuis un terminal, et `telnet localhost 5678` depuis un autre. Tous les messages que vous enverrez (avec la touche « Entrée ») vous seront retransmis.
