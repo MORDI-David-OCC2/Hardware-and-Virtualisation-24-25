@@ -12,12 +12,11 @@ const UART_CTL_OFFSET: u32 = 0x030;  // Control register
 const UART_FR_TXFF: u32 = 1 << 5;    // Transmit FIFO Full
 const UART_FR_RXFE: u32 = 1 << 4;    // Receive FIFO Empty
 
-use crate::usart::Usart;
+use crate::usart::UsartTrait;
 
-pub struct CortexM3 {
-}
+pub struct Usart;
 
-impl Usart for CortexM3 {
+impl UsartTrait for Usart {
     fn initialize(&self) {
         // Disable UART0 before configuring
         write_reg(UART0_BASE + UART_CTL_OFFSET, 0);
