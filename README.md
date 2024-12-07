@@ -1,5 +1,13 @@
 # Rust HAL
 
+Ceci est notre HAL, qui permet d’utiliser les fonctionnalités suivantes :
+
+ - GPIO (`examples/gpio.rs`)
+ - USART (`examples/usart.rs`)
+ - SPI (`examples/spi.rs`)
+
+La bibliothèque détecte automatiquement la target spécifiée pour la compilation et adapte le code en fonction. Par conséquent, il n’est pas nécessaire de spécifier de *features*.
+
 ## Installer les dépendances
 
 Pour tester le HAL, il est recommandé d’utiliser Docker avec l’image `gcc:latest`.
@@ -35,27 +43,18 @@ Ce projet est fait par David Mordi, Inès Kaci et Louis-Marie Matthews, étudian
 
 ## Instructions de lancement sur Windows
 
-[CORRECTION GPIO] (Don't hesitate to remove this part)
-I couldn't compile ! When you make a project for the first time, I recommand you to use the ```cargo new your_project``` command.
-You could abstract your register adresses, by putting them outside your function (as constant)
+### Terminal 1
 
-commandes 7/11/24 USART
+Commandes pour compiler : (le nom des dossiers est à adapter selon la target spécifiée)
 
-Terminal 1
+    cargo +nightly build -Z build-std=core --target avr-unknown-gnu-atmega328 --release
 
-commandes pour compiler :
+    avr-gcc -mmcu=atmega328p -o output.elf ./target/avr-unknown-gnu-atmega328/release/deps/*.o ./target/avr-unknown-gnu-atmega328/release/deps/*.rlib
 
-cargo +nightly build -Z build-std=core --target avr-unknown-gnu-atmega328 --release
+    C:\WinAVR-20100110\bin\avr-objcopy.exe -O ihex .\output.elf output.hex
 
-avr-gcc -mmcu=atmega328p -o output.elf ./target/avr-unknown-gnu-atmega328/release/deps/*.o ./target/avr-unknown-gnu-atmega328/release/deps/*.rlib
+    qemu-system-avr.exe --machine uno -nographic -bios .\output.elf -serial tcp::5678,server=on
 
-C:\WinAVR-20100110\bin\avr-objcopy.exe -O ihex .\output.elf output.hex
-
-Terminal 2 
-Commandes :
-
-qemu-system-avr.exe --machine uno -nographic -bios .\output.elf -serial tcp::5678,server=on
-
-Terminal 3 :
+### Terminal 2 :
 Commandes:
 telnet localhost 5678
