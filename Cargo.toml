@@ -5,19 +5,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-avr-device = { version = "0.6.0", features = ["atmega328p"] }
 cortex-m = "0.7.7"
 cortex-m-rt = "0.7.5"
 cortex-m-semihosting = "0.5.0"
 panic-halt = "1.0.0"
-ufmt = "0.2.0"
-nb = "1.1.0"
-embedded-hal = "1.0"
-
-[dependencies.arduino-hal]
-git = "https://github.com/rahix/avr-hal"
-rev = "3e362624547462928a219c40f9ea8e3a64f21e5f"
-features = ["arduino-uno"]
 
 [profile.release]
 panic = "abort"
