@@ -58,3 +58,9 @@ Commandes pour compiler : (le nom des dossiers est à adapter selon la target sp
 ### Terminal 2 :
 Commandes:
 telnet localhost 5678
+
+
+
+[CORRECTION USART] (Don't hesitate to remove this part)
+Very complete project. It is nice that you used traits.
+You could try implementing other mode, like asynchrone double speed for the atmega for example.
