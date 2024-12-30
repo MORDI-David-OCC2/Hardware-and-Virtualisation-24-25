@@ -1,0 +1,7 @@
+services:
+  rust_dsn:
+    image: rust:latest
+    volumes:
+      - .:/usr/src/myapp
+    stdin_open: true
+    tty: true
