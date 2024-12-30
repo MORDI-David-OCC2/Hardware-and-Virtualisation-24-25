@@ -1,6 +1,6 @@
 services:
   rust_dsn:
-    image: rust:latest
+    build: .
     volumes:
       - .:/usr/src/myapp
     stdin_open: true
