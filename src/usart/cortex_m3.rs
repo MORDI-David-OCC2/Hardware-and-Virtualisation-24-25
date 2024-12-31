@@ -1,6 +1,19 @@
 pub const SYSTEM_CLOCK: u32 = 50_000_000; // Example system clock (50 MHz)
 pub const BAUD_RATE: u32 = 9_600;          // Desired baud rate
 
+const USART1: u32 = 0x4001_3800;
+const USART2: u32 = 0x4000_4400;
+const USART3: u32 = 0x4000_4800;
+const UART4: u32 = 0x4000_4C00;
+const UART5: u32 = 0x4000_5000;
+
+const USART_SR: u32 = 0x00;
+const USART_DR: u32 = 0x04;
+const USART_BRR: u32 = 0x08;
+const USART_CR1: u32 = 0x0C;
+const USART_CR2: u32 = 0x10;
+
+
 const UART0_BASE: u32 = 0x4000C000; // Base address for UART0 (check LM3S6965 datasheet for specific addresses)
 const UART_DR_OFFSET: u32 = 0x000;  // Data register offset
 const UART_FR_OFFSET: u32 = 0x018;  // Flag register offset
@@ -14,10 +27,31 @@ const UART_FR_RXFE: u32 = 1 << 4;    // Receive FIFO Empty
 
 use crate::usart::UsartTrait;
 
-pub struct Usart;
+pub struct Usart {
+    base_address: u32,
+    is_uart_only: bool,
+}
 
 impl UsartTrait for Usart {
+    pub fn new(interface_n: u8) -> Self {
+
+        let base_address = match interface_n {
+            1 => USART1,
+            2 => USART2,
+            3 => USART3,
+            4 => UART4,
+            5 => UART5,
+            _ => panic()
+        };
+        let uart_only = interface_n > 3;
+        Self {
+            base_address,
+            uart_only,
+        }
+    }
+
     fn initialize(&self) {
+
         // Disable UART0 before configuring
         write_reg(UART0_BASE + UART_CTL_OFFSET, 0);
     
