@@ -34,7 +34,8 @@ rustflags = [
 
 
 [build]
-target = "avr-atmega328p.json"
+# target = "avr-atmega328p.json"
+target = "thumbv7m-none-eabi"
 
 # Experimental Cargo features configuration
 [unstable]
