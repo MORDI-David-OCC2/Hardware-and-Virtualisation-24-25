@@ -40,8 +40,8 @@ pub struct Gpio {
 }
 
 impl Gpio {
-    fn get_offset(port: GpioPort) -> *mut u32 {
-        let offset = match port {
+    fn get_offset(&self) -> u32 {
+        match self.port {
             GpioPort::A => map::APB2_GPIO_PORT_A,
             GpioPort::B => map::APB2_GPIO_PORT_B,
             GpioPort::C => map::APB2_GPIO_PORT_C,
@@ -49,8 +49,7 @@ impl Gpio {
             GpioPort::E => map::APB2_GPIO_PORT_E,
             GpioPort::F => map::APB2_GPIO_PORT_F,
             GpioPort::G => map::APB2_GPIO_PORT_G,
-        };
-        offset as *mut u32
+        }
     }
 
     pub unsafe fn init(&self) -> () {
@@ -63,14 +62,20 @@ impl Gpio {
 
 impl super::GpioTrait for Gpio {
     /// Fonction qui configure une broche comme sortie 
-    unsafe fn set_pin_output(&self, pin: u8) -> ()   {
-        // let register = match pin {
-        //     pin if pin < 8 => GpioRegister::GPIOx_CRL as u32,
-        //     pin if pin >= 8 => GpioRegister::GPIOx_CRH as u32,
-        //     _ => panic!(),
-        // };
-        // let address = (self.offset + register) as *mut u32;
-        // core::ptr::write_volatile(address, (core::ptr::read_volatile(address) & 0b0000) | (0b0001 << (pin*2)));
+    unsafe fn set_pin_output(&self, pin: u8) -> () {
+        let offset = self.get_offset();
+        let register = match pin {
+            pin if pin <= 7 => map::GPIO_CRL,
+            pin if pin > 7 => map::GPIO_CRH,
+            _ => panic!(),
+        };
+        let first_bit_position = if pin <= 7 { (pin-1)*4 } else { (pin-8)*4 };
+
+        let address = (offset + register) as *mut u32;
+        let mut value = core::ptr::read_volatile(address);
+        value &= !(0b1111 << first_bit_position); // Clear CNF13[1:0] and MODE13[1:0]
+        value |= (0b0010 << first_bit_position);  // Set MODE13 to Output mode, max speed 2 MHz
+        core::ptr::write_volatile(address, value);
     }
     
     // La fonction prend en argument un numéro de broche du port B

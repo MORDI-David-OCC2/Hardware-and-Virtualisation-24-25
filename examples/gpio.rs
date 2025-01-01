@@ -33,7 +33,7 @@
 #![no_main]
 
 use tp1::rcc::Rcc;
-use tp1::gpio::GpioPort;
+use tp1::gpio::{Gpio, GpioTrait, GpioPort};
 
 use core::ptr;
 use stm32f1::stm32f103;
@@ -50,6 +50,7 @@ fn main() -> ! {
     // Offsets for registers
     const RCC_APB2ENR: u32 = RCC_BASE + 0x18; // APB2 peripheral clock enable register
     const GPIOC_CRH: u32 = GPIOC_BASE + 0x04; // Port configuration register high
+    
     const GPIOC_BSRR: u32 = GPIOC_BASE + 0x10; // Bit set/reset register
 
     unsafe {
@@ -59,11 +60,13 @@ fn main() -> ! {
         Rcc::enable_gpio_port_clock(GpioPort::C);
 
         // 2. Configure PC13 as a push-pull output
-        let gpioc_crh = GPIOC_CRH as *mut u32;
-        let mut crh_val = ptr::read_volatile(gpioc_crh);
-        crh_val &= !(0b1111 << 20); // Clear CNF13[1:0] and MODE13[1:0]
-        crh_val |= (0b0010 << 20);  // Set MODE13 to Output mode, max speed 2 MHz
-        ptr::write_volatile(gpioc_crh, crh_val);
+        // let gpioc_crh = GPIOC_CRH as *mut u32;
+        // let mut crh_val = ptr::read_volatile(gpioc_crh);
+        // crh_val &= !(0b1111 << 20); // Clear CNF13[1:0] and MODE13[1:0]
+        // crh_val |= (0b0010 << 20);  // Set MODE13 to Output mode, max speed 2 MHz
+        // ptr::write_volatile(gpioc_crh, crh_val);
+        let gpio = Gpio {port: GpioPort::C};
+        gpio.set_pin_output(13);
 
         // 3. Blink the LED by toggling PC13
         let gpioc_bsrr = GPIOC_BSRR as *mut u32;
