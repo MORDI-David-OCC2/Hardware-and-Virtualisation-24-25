@@ -8,7 +8,7 @@ pub const AHB_USB_OTG_FS: u32 = 0x5000_0000;
 pub const AHB_ETHERNET: u32 = 0x4002_8000;
 pub const AHB_CRC: u32 = 0x4002_3000;
 pub const AHB_FLASH_MEMORY_INTERFACE_: u32 = 0x4002_2000;
-pub const AHB_RESET_AND_CLOCK_CONTROL_RCC: u32 = 0x4002_1000;
+pub const AHB_RCC: u32 = 0x4002_1000;
 pub const AHB_DMA2: u32 = 0x4002_0400;
 pub const AHB_DMA1: u32 = 0x4002_0000;
 pub const AHB_SDIO: u32 = 0x4001_8000;
@@ -40,7 +40,7 @@ pub const APB2_AFIO: u32 = 0x4001_0000;
 // APB Peripherals are peripherals directly connected to the AP2 bus, also called
 // the low speed APB bus. Its clock frequency is limited to TODO
 pub const APB1_DAC: u32 = 0x4000_7400;
-pub const APB1_POWER_CONTROL_PWR: u32 = 0x4000_7000;
+pub const APB1_PWR: u32 = 0x4000_7000;
 pub const APB1_BXCAN1: u32 = 0x4000_6400;
 pub const APB1_BKP: u32 = 0x4000_6C00;
 pub const APB1_BXCAN2: u32 = 0x4000_6800;
