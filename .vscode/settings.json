@@ -2,5 +2,10 @@
     "editor.rulers": [
         80,
         100
+    ],
+    "rust-analyzer.check.allTargets": false,
+    "rust-analyzer.check.extraArgs": [
+        "--target",
+        "thumbv7m-none-eabi"
     ]
 }
