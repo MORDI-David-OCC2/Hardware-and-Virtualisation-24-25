@@ -32,6 +32,9 @@
 #![no_std]
 #![no_main]
 
+use tp1::rcc::Rcc;
+use tp1::gpio::GpioPort;
+
 use core::ptr;
 use stm32f1::stm32f103;
 
@@ -51,8 +54,9 @@ fn main() -> ! {
 
     unsafe {
         // 1. Enable the clock for GPIOC
-        let rcc_apb2enr = RCC_APB2ENR as *mut u32;
-        ptr::write_volatile(rcc_apb2enr, ptr::read_volatile(rcc_apb2enr) | (1 << 4));
+        // let rcc_apb2enr = RCC_APB2ENR as *mut u32;
+        // ptr::write_volatile(rcc_apb2enr, ptr::read_volatile(rcc_apb2enr) | (1 << 4));
+        Rcc::enable_gpio_port_clock(GpioPort::C);
 
         // 2. Configure PC13 as a push-pull output
         let gpioc_crh = GPIOC_CRH as *mut u32;

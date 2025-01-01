@@ -66,3 +66,24 @@ pub const APB1_TIM6_TIMER: u32 = 0x4000_1000;
 pub const APB1_TIM4_TIMER: u32 = 0x4000_0800;
 pub const APB1_TIM3_TIMER: u32 = 0x4000_0400;
 pub const APB1_TIM2_TIMER: u32 = 0x4000_0000;
+
+// @todo Put in a separate file? Would allow for better separation, documentation
+pub const GPIO_CRL: u32 = 0x00;
+pub const GPIO_CRH: u32 = 0x04;
+pub const GPIO_IDR: u32 = 0x08;
+pub const GPIO_ODR: u32 = 0x0C;
+pub const GPIO_BSRR: u32 = 0x10;
+pub const GPIO_BRR: u32 = 0x14;
+pub const GPIO_LCKR: u32 = 0x18;
+
+// @todo
+pub const RCC_CR: u32 = 0x00;
+pub const RCC_CFGR: u32 = 0x04;
+pub const RCC_CIR: u32 = 0x08;
+pub const RCC_APB2RSTR: u32 = 0x0C;
+pub const RCC_APB1RSTR: u32 = 0x010;
+pub const RCC_AHBENR: u32 = 0x14;
+pub const RCC_APB2ENR: u32 = 0x18;
+pub const RCC_APB1ENR: u32 = 0x1C;
+pub const RCC_BDCR: u32 = 0x20;
+pub const RCC_CSR: u32 = 0x24;

@@ -2,23 +2,33 @@
 //! Toutes les fonctions sont publiques pour permettre au fichier main.rs de les utiliser
 
 // Load memory map constants
-pub mod memory_map;
-
-use super::GpioPort;
+use crate::memory_map::stm32f as map;
+use crate::rcc;
 
 // TODO to delete
 const DDRB: *mut u8 = 0x24 as *mut u8;
 const PORTB: *mut u8 = 0x25 as *mut u8;
 const PINB: *mut u8 = 0x23 as *mut u8;
 
+#[derive(Clone)]
+pub enum GpioPort {
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+}
+
 pub enum GpioRegister {
-    GPIOx_CRL = 0x00,
-    GPIOx_CRH = 0x04,
-    GPIOx_IDR = 0x08,
-    GPIOx_ODR = 0x0C,
-    GPIOx_BSRR = 0x10,
-    GPIOx_BRR = 0x14,
-    GPIOx_LCKR = 0x18,
+    GPIO_CRL,
+    GPIO_CRH,
+    GPIO_IDR,
+    GPIO_ODR,
+    GPIO_BSRR,
+    GPIO_BRR,
+    GPIO_LCKR,
 }
 
 pub enum GpioPin {
@@ -26,23 +36,27 @@ pub enum GpioPin {
 }
 
 pub struct Gpio {
-    offset: u32,
+    pub port: GpioPort,
 }
 
 impl Gpio {
-    pub fn new(port: GpioPort) -> Self {
+    fn get_offset(port: GpioPort) -> *mut u32 {
         let offset = match port {
-            GpioPort::A => memory_map::APB2_GPIO_PORT_A,
-            GpioPort::B => memory_map::APB2_GPIO_PORT_B,
-            GpioPort::C => memory_map::APB2_GPIO_PORT_C,
-            GpioPort::D => memory_map::APB2_GPIO_PORT_D,
-            GpioPort::E => memory_map::APB2_GPIO_PORT_E,
-            GpioPort::F => memory_map::APB2_GPIO_PORT_F,
-            GpioPort::G => memory_map::APB2_GPIO_PORT_G,
+            GpioPort::A => map::APB2_GPIO_PORT_A,
+            GpioPort::B => map::APB2_GPIO_PORT_B,
+            GpioPort::C => map::APB2_GPIO_PORT_C,
+            GpioPort::D => map::APB2_GPIO_PORT_D,
+            GpioPort::E => map::APB2_GPIO_PORT_E,
+            GpioPort::F => map::APB2_GPIO_PORT_F,
+            GpioPort::G => map::APB2_GPIO_PORT_G,
         };
-        Self {offset}
+        offset as *mut u32
     }
-}
+
+    pub unsafe fn init(&self) -> () {
+        rcc::Rcc::enable_gpio_port_clock(self.port.clone());
+    }
+}   
 
 // TODO create enum for pin number? or validate it in other way? Or make it part of GpioPort?
 // TODO Point of BSRR and BRR?
@@ -50,13 +64,13 @@ impl Gpio {
 impl super::GpioTrait for Gpio {
     /// Fonction qui configure une broche comme sortie 
     unsafe fn set_pin_output(&self, pin: u8) -> ()   {
-        let register = match pin {
-            pin if pin < 8 => GpioRegister::GPIOx_CRL as u32,
-            pin if pin >= 8 => GpioRegister::GPIOx_CRH as u32,
-            _ => panic!(),
-        };
-        let address = (self.offset + register) as *mut u32;
-        core::ptr::write_volatile(address, (core::ptr::read_volatile(address) & 0b0000) | (0b0001 << (pin*2)));
+        // let register = match pin {
+        //     pin if pin < 8 => GpioRegister::GPIOx_CRL as u32,
+        //     pin if pin >= 8 => GpioRegister::GPIOx_CRH as u32,
+        //     _ => panic!(),
+        // };
+        // let address = (self.offset + register) as *mut u32;
+        // core::ptr::write_volatile(address, (core::ptr::read_volatile(address) & 0b0000) | (0b0001 << (pin*2)));
     }
     
     // La fonction prend en argument un numéro de broche du port B

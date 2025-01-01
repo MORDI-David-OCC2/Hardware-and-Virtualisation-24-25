@@ -4,16 +4,6 @@ pub mod atmega328p;
 #[cfg(target_arch = "arm")]
 pub mod cortex_m3;
 
-pub enum GpioPort {
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-}
-
 pub trait GpioTrait {
     unsafe fn set_pin_output(&self, pin: u8) -> ();
     // La fonction prend en argument un numéro de broche du port B
@@ -39,3 +29,6 @@ pub trait GpioTrait {
 
 #[cfg(target_arch = "avr")]
 pub use atmega328p::Gpio as Gpio;
+
+#[cfg(target_arch = "arm")]
+pub use cortex_m3::{Gpio as Gpio, GpioPort as GpioPort};
