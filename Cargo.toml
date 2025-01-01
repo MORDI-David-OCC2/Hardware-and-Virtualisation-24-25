@@ -5,10 +5,25 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-cortex-m = "0.7.7"
-cortex-m-rt = "0.7.5"
-cortex-m-semihosting = "0.5.0"
+# cortex-m = "0.7.7"
+cortex-m-rt = "0.7.5" # Provides `link.x` script used for linking
 panic-halt = "1.0.0"
+
+[dependencies.stm32f1]
+version = "0.15.1"
+features = ["stm32f103"]
+
+[dev-dependencies]
+cortex-m-semihosting = "0.5.0"
+
+# The following depends on the crate stm32f1, which provides `device.x`, which
+# the custom linker script `link.x` relies upon.
+# [dependencies.stm32f1xx-hal]
+# version = "0.10.0"
+# features = ["rt", "stm32f103", "medium"]
+
+#[package.metadata.cortex-m]
+#memory = "memory.x"
 
 [profile.release]
 panic = "abort"

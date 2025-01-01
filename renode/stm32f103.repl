@@ -1,0 +1,6 @@
+using "platforms/cpus/stm32f103.repl"
+
+UserLED: Miscellaneous.LED @ gpioPortC
+
+gpioPortC:
+    13 -> UserLED@0

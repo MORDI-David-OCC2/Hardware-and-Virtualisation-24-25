@@ -4,6 +4,9 @@ runner = "qemu-system-avr -nographic -machine uno -bios target/avr-atmega328p/de
 
 [target.'cfg(target_arch = "arm")']
 runner = "qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -nographic -kernel target/thumbv7m-none-eabi/debug/examples/usart -serial tcp::5678,server=on,wait=on"
+rustflags = [
+  "-C", "link-arg=-Tlink.x"
+]
 
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
 # uncomment ONE of these three option to make `cargo run` start a GDB session
@@ -28,6 +31,7 @@ rustflags = [
   # "-C", "link-arg=-Wl,-Tlink.x",
   # "-C", "link-arg=-nostartfiles",
 ]
+
 
 [build]
 target = "avr-atmega328p.json"
