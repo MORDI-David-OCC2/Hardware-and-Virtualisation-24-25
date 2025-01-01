@@ -33,22 +33,22 @@ pub struct Usart {
 }
 
 impl UsartTrait for Usart {
-    pub fn new(interface_n: u8) -> Self {
+    // fn new(interface_n: u8) -> Self {
 
-        let base_address = match interface_n {
-            1 => USART1,
-            2 => USART2,
-            3 => USART3,
-            4 => UART4,
-            5 => UART5,
-            _ => panic()
-        };
-        let uart_only = interface_n > 3;
-        Self {
-            base_address,
-            uart_only,
-        }
-    }
+    //     let base_address = match interface_n {
+    //         1 => USART1,
+    //         2 => USART2,
+    //         3 => USART3,
+    //         4 => UART4,
+    //         5 => UART5,
+    //         _ => panic!()
+    //     };
+    //     let uart_only = interface_n > 3;
+    //     Self use uart_only {
+    //         base_address,
+    //         uart_only,
+    //     }
+    // }
 
     fn initialize(&self) {
 

@@ -1,8 +1,21 @@
 #[cfg(target_arch = "avr")]
 pub mod atmega328p;
 
+#[cfg(target_arch = "arm")]
+pub mod cortex_m3;
+
+pub enum GpioPort {
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+}
+
 pub trait GpioTrait {
-    unsafe fn set_pin_output(pin: u8);
+    unsafe fn set_pin_output(&self, pin: u8) -> ();
     // La fonction prend en argument un numéro de broche du port B
     // Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
     // Le bit est mis à 1 ce qui configure la broche en sortie 
