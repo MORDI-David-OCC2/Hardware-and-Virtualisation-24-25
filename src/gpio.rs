@@ -12,19 +12,19 @@ pub trait GpioTrait {
     // Maj du registre DDRB 
     
     /// Fonction pour configurer une broche comme entrée
-    unsafe fn set_pin_input(pin: u8);
+    unsafe fn set_pin_input(&self, pin: u8);
     
     /// Fonction pour mettre une broche à l'état haut 
-    unsafe fn set_pin_high(pin: u8);
+    unsafe fn set_pin_high(&self, pin: u8);
     
     /// Fonction pour mettre une broche à l'état bas 
-    unsafe fn set_pin_low(pin: u8);
+    unsafe fn set_pin_low(&self, pin: u8);
     
     /// Fonction pour inverser l'etat d'une broche 
-    unsafe fn toggle_pin(pin: u8);
+    unsafe fn toggle_pin(&self, pin: u8);
     
     /// Fonction pour lire l'état d'une broche 
-    unsafe fn read_pin(pin: u8) -> u8;
+    unsafe fn read_pin(&self, pin: u8) -> u8;
 }
 
 #[cfg(target_arch = "avr")]

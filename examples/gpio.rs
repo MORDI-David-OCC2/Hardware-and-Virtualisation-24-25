@@ -68,16 +68,14 @@ fn main() -> ! {
         let gpio = Gpio {port: GpioPort::C};
         gpio.set_pin_output(13);
 
-        // 3. Blink the LED by toggling PC13
-        let gpioc_bsrr = GPIOC_BSRR as *mut u32;
         loop {
             // Turn LED on (PC13 is active low, so set PC13 to 0)
-            ptr::write_volatile(gpioc_bsrr, 1 << 13);
+            gpio.set_pin_high(13);
 
             delay(8_000_000); // Arbitrary delay for ~500ms
 
             // Turn LED off (set PC13 to 1)
-            ptr::write_volatile(gpioc_bsrr, 1 << (13 + 16)); // Reset bit for PC13
+            gpio.set_pin_low(13);
 
             delay(8_000_000); // Arbitrary delay for ~500ms
         }

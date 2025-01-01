@@ -62,6 +62,7 @@ impl Gpio {
 
 impl super::GpioTrait for Gpio {
     /// Fonction qui configure une broche comme sortie 
+    /// todo panic if pin not valid
     unsafe fn set_pin_output(&self, pin: u8) -> () {
         let offset = self.get_offset();
         let register = match pin {
@@ -84,27 +85,30 @@ impl super::GpioTrait for Gpio {
     // Maj du registre DDRB 
     
     /// Fonction pour configurer une broche comme entrée
-    unsafe fn set_pin_input(pin: u8) {
+    unsafe fn set_pin_input(&self, pin: u8) {
         core::ptr::write_volatile(DDRB, core::ptr::read_volatile(DDRB) & !(1 << pin));
     }
     
     /// Fonction pour mettre une broche à l'état haut 
-    unsafe fn set_pin_high(pin: u8) {
-        core::ptr::write_volatile(PORTB, core::ptr::read_volatile(PORTB) | (1 << pin));
+    unsafe fn set_pin_high(&self, pin: u8) {
+        let address = (self.get_offset() + map::GPIO_BSRR) as *mut u32;
+        core::ptr::write_volatile(address, 1 << pin);
     }
     
-    /// Fonction pour mettre une broche à l'état bas 
-    unsafe fn set_pin_low(pin: u8) {
-        core::ptr::write_volatile(PORTB, core::ptr::read_volatile(PORTB) & !(1 << pin));
+    /// Fonction pour mettre une broche à l'état haut 
+    unsafe fn set_pin_low(&self, pin: u8) {
+        let address = (self.get_offset() + map::GPIO_BSRR) as *mut u32;
+        let bit_position = 16 + pin;
+        core::ptr::write_volatile(address, 1 << bit_position);
     }
     
     /// Fonction pour inverser l'etat d'une broche 
-    unsafe fn toggle_pin(pin: u8) {
+    unsafe fn toggle_pin(&self, pin: u8) {
         core::ptr::write_volatile(PORTB, core::ptr::read_volatile(PORTB) ^ (1 << pin));
     }
     
     /// Fonction pour lire l'état d'une broche 
-    unsafe fn read_pin(pin: u8) -> u8 {
+    unsafe fn read_pin(&self, pin: u8) -> u8 {
         (core::ptr::read_volatile(PINB) & (1 << pin)) >> pin
     }
 }
