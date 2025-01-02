@@ -20,11 +20,8 @@ pub trait GpioTrait {
     /// Fonction pour mettre une broche à l'état bas 
     unsafe fn set_pin_low(&self, pin: u8);
     
-    /// Fonction pour inverser l'etat d'une broche 
-    unsafe fn toggle_pin(&self, pin: u8);
-    
     /// Fonction pour lire l'état d'une broche 
-    unsafe fn read_pin(&self, pin: u8) -> u8;
+    unsafe fn read_pin(&self, pin: u8) -> bool;
 }
 
 #[cfg(target_arch = "avr")]
