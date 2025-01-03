@@ -16,20 +16,6 @@ pub enum GpioPort {
     G,
 }
 
-pub enum GpioRegister {
-    GPIO_CRL,
-    GPIO_CRH,
-    GPIO_IDR,
-    GPIO_ODR,
-    GPIO_BSRR,
-    GPIO_BRR,
-    GPIO_LCKR,
-}
-
-pub enum GpioPin {
-    
-}
-
 pub struct Gpio {
     pub port: GpioPort,
 }

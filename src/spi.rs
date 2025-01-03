@@ -4,7 +4,7 @@
 pub mod atmega328p;
 
 #[cfg(target_arch = "arm")]
-pub mod cortex_m3;
+pub mod stm32f1;
 
 // Définir un trait commun pour les fonctionnalités SPI
 pub trait Spi {
@@ -23,4 +23,4 @@ pub trait Spi {
 pub use atmega328p::Spi as SpiImpl;
 
 #[cfg(target_arch = "arm")]
-pub use cortex_m3::Spi as SpiImpl;
+pub use stm32f1::Spi as SpiImpl;

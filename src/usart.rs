@@ -4,7 +4,7 @@
 pub mod atmega328p;
 
 #[cfg(target_arch = "arm")]
-pub mod cortex_m3;
+pub mod stm32f1;
 
 pub trait UsartTrait {
     fn initialize(&self);
@@ -22,4 +22,4 @@ pub trait UsartTrait {
 pub use atmega328p::Usart as Usart;
 
 #[cfg(target_arch = "arm")]
-pub use cortex_m3::Usart as Usart;
+pub use stm32f1::Usart as Usart;

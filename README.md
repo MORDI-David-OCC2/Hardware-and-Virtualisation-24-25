@@ -8,6 +8,11 @@ Ceci est notre HAL, qui permet d’utiliser les fonctionnalités suivantes :
 
 La bibliothèque détecte automatiquement la target spécifiée pour la compilation et adapte le code en fonction. Par conséquent, il n’est pas nécessaire de spécifier de *features*.
 
+## Target support
+
+ - Atmega328P MCU
+ - STM32F1xxxx MCU family (Cortex-M3)
+
 ## Installer les dépendances
 
 Pour tester le HAL, il est recommandé d’utiliser Docker avec l’image `gcc:latest`.

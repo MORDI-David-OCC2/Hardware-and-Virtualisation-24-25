@@ -1,5 +1,5 @@
 #[cfg(target_arch = "arm")]
-pub mod cortex_m3;
+pub mod stm32f1;
 
 #[cfg(target_arch = "arm")]
-pub use cortex_m3::Rcc;
+pub use stm32f1::Rcc;

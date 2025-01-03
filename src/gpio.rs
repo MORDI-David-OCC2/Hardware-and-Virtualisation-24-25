@@ -2,7 +2,7 @@
 pub mod atmega328p;
 
 #[cfg(target_arch = "arm")]
-pub mod cortex_m3;
+pub mod stm32f1;
 
 pub trait GpioTrait {
     unsafe fn set_pin_output(&self, pin: u8) -> ();
@@ -28,4 +28,4 @@ pub trait GpioTrait {
 pub use atmega328p::Gpio as Gpio;
 
 #[cfg(target_arch = "arm")]
-pub use cortex_m3::{Gpio as Gpio, GpioPort as GpioPort};
+pub use stm32f1::{Gpio as Gpio, GpioPort as GpioPort};
