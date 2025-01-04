@@ -21,7 +21,10 @@ fn main() -> ! {
         unsafe {
             let message = "Hello USART\r\n";
             usart.send_message(message);
-
+            usart.set_listening_status(true);
+            let byte = usart.receive_byte();
+            usart.transmit_byte(byte);
+            usart.set_listening_status(false);
         }
         delay_ms(1000); // Wait 1 second
     }

@@ -20,3 +20,15 @@ pub mod spi;
 
 /// USART/UART features
 pub mod usart;
+
+pub fn read_reg(addr: u32) -> u32 {
+    unsafe {
+        (addr as *const u32).read_volatile()
+    }
+}
+
+pub fn write_reg(addr: u32, value: u32) {
+    unsafe {
+        (addr as *mut u32).write_volatile(value);
+    }
+}
