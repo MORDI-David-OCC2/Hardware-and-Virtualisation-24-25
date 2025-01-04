@@ -5,6 +5,14 @@
 use crate::memory_map::stm32f1 as map;
 use crate::rcc;
 
+const GPIO_CRL: u32 = 0x00;
+const GPIO_CRH: u32 = 0x04;
+const GPIO_IDR: u32 = 0x08;
+const GPIO_ODR: u32 = 0x0C;
+const GPIO_BSRR: u32 = 0x10;
+const GPIO_BRR: u32 = 0x14;
+const GPIO_LCKR: u32 = 0x18;
+
 #[derive(Clone)]
 pub enum GpioPort {
     A,
@@ -41,8 +49,8 @@ impl Gpio {
     unsafe fn set_pin_mode(&self, pin: u8, set: bool) -> () {
         let offset = self.get_offset();
         let register = match pin {
-            pin if pin <= 7 => map::GPIO_CRL,
-            pin if pin > 7 => map::GPIO_CRH,
+            pin if pin <= 7 => GPIO_CRL,
+            pin if pin > 7 => GPIO_CRH,
             _ => panic!(),
         };
         let first_bit_position = if pin <= 7 { (pin-1)*4 } else { (pin-8)*4 };
@@ -78,20 +86,20 @@ impl super::GpioTrait for Gpio {
     
     /// Fonction pour mettre une broche à l'état haut 
     unsafe fn set_pin_high(&self, pin: u8) {
-        let address = (self.get_offset() + map::GPIO_BSRR) as *mut u32;
+        let address = (self.get_offset() + GPIO_BSRR) as *mut u32;
         core::ptr::write_volatile(address, 1 << pin);
     }
     
     /// Fonction pour mettre une broche à l'état haut 
     unsafe fn set_pin_low(&self, pin: u8) {
-        let address = (self.get_offset() + map::GPIO_BSRR) as *mut u32;
+        let address = (self.get_offset() + GPIO_BSRR) as *mut u32;
         let bit_position = 16 + pin;
         core::ptr::write_volatile(address, 1 << bit_position);
     }
     
     /// Fonction pour lire l'état d'une broche
     unsafe fn read_pin(&self, pin: u8) -> bool {
-        let value: u32 = (core::ptr::read_volatile((self.get_offset() + map::GPIO_ODR) as *mut u32) >> pin ) & 1;
+        let value: u32 = (core::ptr::read_volatile((self.get_offset() + GPIO_ODR) as *mut u32) >> pin ) & 1;
         1 == value
     }
 }

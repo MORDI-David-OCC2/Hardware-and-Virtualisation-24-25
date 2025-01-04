@@ -6,6 +6,8 @@ const USART_DR: u32 = 0x04;
 const USART_BRR: u32 = 0x08;
 const USART_CR1: u32 = 0x0C;
 const USART_CR2: u32 = 0x10;
+const USART_CR3: u32 = 0x14;
+const USART_GTPR: u32 = 0x18;
 
 const APB1_MAX_CLOCK_FREQUENCY: u32 = 36_000_000; // APB2 clock frequency (72 MHz for STM32F103)
 const APB2_MAX_CLOCK_FREQUENCY: u32 = 72_000_000; // APB2 clock frequency (72 MHz for STM32F103)

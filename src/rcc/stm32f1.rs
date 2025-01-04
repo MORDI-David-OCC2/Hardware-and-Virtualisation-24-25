@@ -1,6 +1,17 @@
 use crate::gpio::GpioPort;
 
-use crate::memory_map::stm32f1::{AHB_RCC, RCC_APB2ENR};
+use crate::memory_map::stm32f1::AHB_RCC;
+
+const RCC_CR: u32 = 0x00;
+const RCC_CFGR: u32 = 0x04;
+const RCC_CIR: u32 = 0x08;
+const RCC_APB2RSTR: u32 = 0x0C;
+const RCC_APB1RSTR: u32 = 0x010;
+const RCC_AHBENR: u32 = 0x14;
+const RCC_APB2ENR: u32 = 0x18;
+const RCC_APB1ENR: u32 = 0x1C;
+const RCC_BDCR: u32 = 0x20;
+const RCC_CSR: u32 = 0x24;
 
 pub struct Rcc;
 
