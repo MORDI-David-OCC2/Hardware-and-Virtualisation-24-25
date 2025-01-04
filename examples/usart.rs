@@ -13,28 +13,14 @@ fn main() -> ! {
         peripheral: UsartPeripheral::Usart1,
         use_9_bit_words: false,
     };
-    unsafe {
-        usart.init();
-    }
+    usart.init();
 
     loop {
-        unsafe {
-            let message = "Hello USART\r\n";
-            usart.send_message(message);
-            usart.set_listening_status(true);
-            let byte = usart.receive_byte();
-            usart.transmit_byte(byte);
-            usart.set_listening_status(false);
-        }
-        delay_ms(1000); // Wait 1 second
-    }
-}
-
-// Delay function (busy wait)
-// TODO Remove
-fn delay_ms(count: u32) {
-    for _ in 0..count {
-        // Simple busy-wait loop
-        unsafe { core::arch::asm!("nop") }
+        let message = "Hello USART\r\n";
+        usart.send_message(message);
+        usart.set_listening_status(true);
+        let byte = usart.receive_byte();
+        usart.transmit_byte(byte);
+        usart.set_listening_status(false);
     }
 }

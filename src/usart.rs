@@ -7,15 +7,15 @@ pub mod atmega328p;
 pub mod stm32f1;
 
 pub trait UsartTrait {
-    unsafe fn init(&self);
+    fn init(&self);
 
-    unsafe fn transmit_byte(&self, byte: u8);
+    fn transmit_byte(&self, byte: u8);
 
     /// Envoie d'une chaîne de caractère via l'USART 
-    unsafe fn send_message(&self, s: &str);
+    fn send_message(&self, s: &str);
 
     /// Recoit un octet via l'USART
-    unsafe fn receive_byte(&self) -> u8;
+    fn receive_byte(&self) -> u8;
 }
 
 #[cfg(target_arch = "avr")]

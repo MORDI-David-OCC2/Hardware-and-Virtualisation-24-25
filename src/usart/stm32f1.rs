@@ -9,7 +9,7 @@ const USART_CR2: u32 = 0x10;
 const USART_CR3: u32 = 0x14;
 const USART_GTPR: u32 = 0x18;
 
-const APB1_MAX_CLOCK_FREQUENCY: u32 = 36_000_000; // APB2 clock frequency (72 MHz for STM32F103)
+const APB1_MAX_CLOCK_FREQUENCY: u32 = 36_000_000; // APB1 clock frequency (36 MHz for STM32F103)
 const APB2_MAX_CLOCK_FREQUENCY: u32 = 72_000_000; // APB2 clock frequency (72 MHz for STM32F103)
 const BAUD_RATE: u32 = 115_200; // Desired baud rate
 
@@ -33,17 +33,17 @@ pub struct Usart {
 }
 
 impl Usart {
-    pub unsafe fn is_ready(&self) -> bool {
-        let tc = core::ptr::read_volatile((self.get_peripheral_offset() + USART_SR) as *mut u32) >> REG_SR_TC & 1;
+    pub fn is_ready_to_send(&self) -> bool {
+        let tc = read_reg(self.get_peripheral_offset() + USART_SR) >> REG_SR_TC & 1;
         1 == tc
     }
 
-    pub unsafe fn set_listening_status(&self, enable_listening: bool) -> () {
+    pub fn set_listening_status(&self, enable_listening: bool) -> () {
         let address = self.get_peripheral_offset() + USART_CR1;
-        let value = core::ptr::read_volatile(address as *const u32);
+        let value = read_reg(address);
         match enable_listening {
-            true => core::ptr::write_volatile(address as *mut u32, value | 1 << REG_CR1_RE),
-            false => core::ptr::write_volatile(address as *mut u32, value & !(1 << REG_CR1_RE)),
+            true => write_reg(address, value | 1 << REG_CR1_RE),
+            false => write_reg(address, value & !(1 << REG_CR1_RE)),
         }
     }
 
@@ -61,18 +61,18 @@ impl Usart {
 impl UsartTrait for Usart {
     /// Initialize the USART/UART peripheral
     /// 
-    /// This sets the UE and M bit to enable the peripheral and define the word
-    /// length to 8 bit.
+    /// This sets the UE and M bit to enable the peripheral, define the word
+    /// length to 8 bit and set the baud rate.
     /// 
     /// # Todo
     /// 
     /// [x] Implement method
     /// [x] Make word length configurable
-    /// [ ] Set the number of stop bits
-    unsafe fn init(&self) -> () {
+    /// [ ] Set the number of stop bits (further improvement)
+    fn init(&self) -> () {
         let address = self.get_peripheral_offset() + USART_CR1;
-        let value = core::ptr::read_volatile(address as *mut u32);
-        core::ptr::write_volatile(address as *mut u32, value | 0b10 + (self.use_9_bit_words as u32) << 12);
+        let value = read_reg(address.clone());
+        write_reg(address, value | 0b10 + (self.use_9_bit_words as u32) << 12);
 
         // Use clock frequency of bus to which the USART peripheral is attached
         let usart_div = match self.peripheral {
@@ -80,18 +80,16 @@ impl UsartTrait for Usart {
             _ => APB1_MAX_CLOCK_FREQUENCY,
         } / BAUD_RATE;
 
-        core::ptr::write_volatile((self.get_peripheral_offset() + USART_BRR) as *mut u32, usart_div);
+        write_reg(self.get_peripheral_offset() + USART_BRR, usart_div);
     }
     
     // Wait until the TX buffer is cleared, then send the byte
-    unsafe fn transmit_byte(&self, byte: u8) {
-        unsafe {
-            while !self.is_ready() {}
-            write_reg(self.get_peripheral_offset() + USART_DR, byte as u32);
-        }
+    fn transmit_byte(&self, byte: u8) {
+        while !self.is_ready_to_send() {}
+        write_reg(self.get_peripheral_offset() + USART_DR, byte as u32);
     }
     
-    unsafe fn receive_byte(&self) -> u8 {
+    fn receive_byte(&self) -> u8 {
         // Wait until the receive FIFO is not empty
         while (read_reg(self.get_peripheral_offset() + USART_SR) >> REG_SR_RXNE) & 1 != 1 {}
     
@@ -100,7 +98,7 @@ impl UsartTrait for Usart {
     }
 
     /// Envoie d'une chaîne de caractère via l'USART 
-    unsafe fn send_message(&self, s: &str) {
+    fn send_message(&self, s: &str) {
         s.as_bytes().iter().for_each(|b| self.transmit_byte(*b));
     }
 }
