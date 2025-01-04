@@ -1,3 +1,12 @@
+//! USART pour STM32F1
+//! 
+//! Ce module définit `Usart`, une structure permettant d’interagir avec les
+//! périphériques USART. Il définit également des constantes concernant les
+//! addresses, et l’enum `UsartPeripheral`.
+//! Ce module s’addresse aux microcontrôleurs de la famille STM32F1.
+//! Certains des périphériques sont uniquement UART et non USART. Sauf mention
+//! contraire, ils seront également designés par le term d’UART.
+
 use crate::memory_map::stm32f1;
 use crate::{read_reg, write_reg};
 
@@ -17,6 +26,7 @@ const REG_CR1_RE: u32 = 2;
 const REG_SR_TC: u32 = 6;
 const REG_SR_RXNE: u8 = 5;
 
+/// Enum for representing one of the 5 available USART peripherals
 pub enum UsartPeripheral {
     Usart1,
     Usart2,
@@ -25,19 +35,20 @@ pub enum UsartPeripheral {
     Uart5,
 }
 
-use crate::usart::UsartTrait;
-
+/// Structure used for interacting with one specific USART peripheral
 pub struct Usart {
     pub peripheral: UsartPeripheral,
     pub use_9_bit_words: bool,
 }
 
 impl Usart {
+    /// Wether the peripheral is ready to start transmitting
     pub fn is_ready_to_send(&self) -> bool {
         let tc = read_reg(self.get_peripheral_offset() + USART_SR) >> REG_SR_TC & 1;
         1 == tc
     }
 
+    /// Set the listening status to on (`true`) or off (`false`)
     pub fn set_listening_status(&self, enable_listening: bool) -> () {
         let address = self.get_peripheral_offset() + USART_CR1;
         let value = read_reg(address);
@@ -47,6 +58,7 @@ impl Usart {
         }
     }
 
+    /// Get the address in memory of the peripheral
     fn get_peripheral_offset(&self) -> u32 {
         match self.peripheral {
             UsartPeripheral::Usart1 => stm32f1::APB2_USART1,
@@ -58,7 +70,7 @@ impl Usart {
     }
 }
 
-impl UsartTrait for Usart {
+impl super::UsartTrait for Usart {
     /// Initialize the USART/UART peripheral
     /// 
     /// This sets the UE and M bit to enable the peripheral, define the word
@@ -89,6 +101,7 @@ impl UsartTrait for Usart {
         write_reg(self.get_peripheral_offset() + USART_DR, byte as u32);
     }
     
+    /// Wait for a byte to be received, then return it
     fn receive_byte(&self) -> u8 {
         // Wait until the receive FIFO is not empty
         while (read_reg(self.get_peripheral_offset() + USART_SR) >> REG_SR_RXNE) & 1 != 1 {}
