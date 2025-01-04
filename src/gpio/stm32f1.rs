@@ -2,7 +2,7 @@
 //! Toutes les fonctions sont publiques pour permettre au fichier main.rs de les utiliser
 
 // Load memory map constants
-use crate::memory_map::stm32f as map;
+use crate::memory_map::stm32f1 as map;
 use crate::rcc;
 
 #[derive(Clone)]

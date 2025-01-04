@@ -4,7 +4,6 @@
 use tp1::rcc::Rcc;
 use tp1::gpio::{Gpio, GpioTrait, GpioPort};
 
-use core::ptr;
 use stm32f1::stm32f103;
 
 use cortex_m_rt::entry; // Entry point attribute

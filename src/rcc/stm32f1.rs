@@ -1,6 +1,6 @@
 use crate::gpio::GpioPort;
 
-use crate::memory_map::stm32f::{AHB_RCC, RCC_APB2ENR};
+use crate::memory_map::stm32f1::{AHB_RCC, RCC_APB2ENR};
 
 pub struct Rcc;
 

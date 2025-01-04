@@ -87,3 +87,11 @@ pub const RCC_APB2ENR: u32 = 0x18;
 pub const RCC_APB1ENR: u32 = 0x1C;
 pub const RCC_BDCR: u32 = 0x20;
 pub const RCC_CSR: u32 = 0x24;
+
+pub const USART_SR: u32 = 0x00;
+pub const USART_DR: u32 = 0x04;
+pub const USART_BRR: u32 = 0x08;
+pub const USART_CR1: u32 = 0x0C;
+pub const USART_CR2: u32 = 0x10;
+pub const USART_CR3: u32 = 0x14;
+pub const USART_GTPR: u32 = 0x18;

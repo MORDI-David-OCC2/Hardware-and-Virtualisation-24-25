@@ -1,0 +1,17 @@
+mach create "stm32f103_usart"
+machine LoadPlatformDescription @renode/stm32f103.repl
+logLevel -1
+
+emulation CreateServerSocketTerminal 12345 "term"
+connector Connect sysbus.usart1 term
+
+$bin?=@target/thumbv7m-none-eabi/debug/examples/usart
+
+macro reset
+"""
+    sysbus LoadELF $bin
+"""
+
+runMacro $reset
+
+start

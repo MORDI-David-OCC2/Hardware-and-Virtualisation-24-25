@@ -2,29 +2,36 @@
 #![no_main]
 
 use panic_halt as _;
-use tp1::usart::{Usart, UsartTrait};
+use stm32f1::stm32f103;
+use cortex_m_rt::entry; // Entry point attribute
+use tp1::usart::{Usart, UsartTrait, UsartPeripheral};
 
-#[no_mangle]
-fn main() {
-    let usart = Usart {};
+// Entry point
+#[entry]
+fn main() -> ! {
+    let usart = Usart{
+        peripheral: UsartPeripheral::Usart1,
+        use_9_bit_words: false,
+    };
+    unsafe {
+        usart.init();
+    }
 
-    //Initialisation de l'USART
-    usart.initialize(); 
-
-    // Envoi d'un message
-    usart.send_message("Hello, USART!");
-    
     loop {
-        
-        //Réception d'un octet et réemission de l'octet avec un message pour indiquer la bonne reception
-        let received_byte = usart.receive_byte();
+        unsafe {
+            let message = "Hello USART\r\n";
+            usart.send_message(message);
 
-        //Envoi d'un message indiquant que l'octet a été reçu
-        usart.send_message("Recu : ");
-        usart.transmit_byte(received_byte);
+        }
+        delay_ms(1000); // Wait 1 second
     }
 }
 
-
-
-
+// Delay function (busy wait)
+// TODO Remove
+fn delay_ms(count: u32) {
+    for _ in 0..count {
+        // Simple busy-wait loop
+        unsafe { core::arch::asm!("nop") }
+    }
+}
