@@ -2,7 +2,7 @@
 //! 
 //! This is not available on every architecture.
 
-// Delay function (busy wait)
+/// Delay function (busy wait)
 #[cfg(target_arch = "arm")]
 pub fn delay_ms(count: u32) {
     for _ in 0..count*8000 {

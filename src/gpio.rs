@@ -1,12 +1,18 @@
+//! Allows interacting with the GPIO ports
+
 pub mod atmega328p;
 pub mod stm32f1;
 
+/// Represents a GPIO peripheral
+/// 
+/// Instances of this platform-agnostic trait represent one particular GPIO
+/// Port. They allow interacting and controlling it, which includes its pins.
 pub trait GpioTrait {
+    /// La fonction prend en argument un numéro de broche du port B
+    /// Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
+    /// Le bit est mis à 1 ce qui configure la broche en sortie 
+    /// Maj du registre DDRB
     fn set_pin_output(&self, pin: u8) -> ();
-    // La fonction prend en argument un numéro de broche du port B
-    // Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
-    // Le bit est mis à 1 ce qui configure la broche en sortie 
-    // Maj du registre DDRB 
     
     /// Fonction pour configurer une broche comme entrée
     fn set_pin_input(&self, pin: u8) -> ();

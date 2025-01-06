@@ -14,6 +14,7 @@ const GPIO_BSRR: u32 = 0x10;
 const GPIO_BRR: u32 = 0x14;
 const GPIO_LCKR: u32 = 0x18;
 
+/// Defines the existing GPIO ports existing on any STM32F1 device
 #[derive(Clone)]
 pub enum GpioPort {
     A,
@@ -25,12 +26,14 @@ pub enum GpioPort {
     G,
 }
 
+/// Defines the different input configurations
 pub enum GpioInput {
     Analog,
     FloatingInput,
     PullUpPullDownInput,
 }
 
+/// Defines the different output CNF configurations
 pub enum PinOutputCnf {
     GeneralPurposeOutputPushPull,
     GeneralPurposeOutputOpenDrain,
@@ -38,17 +41,21 @@ pub enum PinOutputCnf {
     AlternateFunctionOutputOpenDrain,
 }
 
+/// Defines the supported output speeds
 pub enum PinOutputMode {
     MaxSpeed10MHZ,
     MaxSpeed2MHZ,
     MaxSpeed50MHZ,
 }
 
+/// Represents a GPIO port of a STM32F1 device
 pub struct Gpio {
+    /// The port managed by the instance
     pub port: GpioPort,
 }
 
 impl Gpio {
+    /// Get the address in memory of the peripheral
     fn get_offset(&self) -> u32 {
         match self.port {
             GpioPort::A => map::APB2_GPIO_PORT_A,
@@ -61,10 +68,13 @@ impl Gpio {
         }
     }
 
+    /// Initialize the peripheral
     pub unsafe fn init(&self) -> () {
         Rcc::enable_gpio_port_clock(self.port.clone());
     }
 
+    /// Sets the pin mode
+    /// 
     /// todo panic if pin not valid
     fn set_pin_mode(&self, pin: u8, set: bool) -> () {
         let offset = self.get_offset();
@@ -82,7 +92,8 @@ impl Gpio {
         write_reg(address, value);
     }
 
-    ///
+    /// Sets the pin as output
+    /// 
     /// ## Todo
     /// [ ] Allow editing of multiple pins of the same register at the same time
     /// [ ] Similar function for input
@@ -112,24 +123,19 @@ impl Gpio {
     }
 }   
 
-// TODO create enum for pin number? or validate it in other way? Or make it part of GpioPort?
-// TODO Point of BSRR and BRR?
-
 impl super::GpioTrait for Gpio {
     /// Fonction qui configure une broche comme sortie 
-    
-
     fn set_pin_output(&self, pin: u8) -> () {
 
         self.set_pin_to_output(pin, PinOutputCnf::AlternateFunctionOutputPushPull, PinOutputMode::MaxSpeed2MHZ);
     }
     
-    // La fonction prend en argument un numéro de broche du port B
-    // Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
-    // Le bit est mis à 1 ce qui configure la broche en sortie 
-    // Maj du registre DDRB 
-    
     /// Fonction pour configurer une broche comme entrée
+    /// 
+    /// La fonction prend en argument un numéro de broche du port B
+    /// Le bit est mis à 1 ce qui configure la broche en sortie 
+    /// Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
+    /// Maj du registre DDRB 
     fn set_pin_input(&self, pin: u8) {
         self.set_pin_mode(pin, false);
     }

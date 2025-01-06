@@ -1,3 +1,5 @@
+//! Allows interacting with the SPI peripheral(s) of the Atmega328P
+
 use core::ptr;
 
 const DDR_SPI: *mut u8 = 0x24 as *mut u8; // Adresse du registre DDRB
@@ -5,10 +7,16 @@ const SPCR: *mut u8 = 0x4C as *mut u8; // Adresse du registre SPCR
 const SPSR: *mut u8 = 0x4D as *mut u8; // Adresse du registre SPSR
 const SPDR: *mut u8 = 0x4E as *mut u8; // Adresse du registre SPDR
 
-const DD_MOSI: u8 = 3; // MOSI sur PB3
-const DD_MISO: u8 = 4; // MISO sur PB4
-const DD_SCK: u8 = 5;  // SCK sur PB5
+/// MOSI sur PB3
+const DD_MOSI: u8 = 3;
 
+/// MISO sur PB4
+const DD_MISO: u8 = 4;
+
+/// SCK sur PB5
+const DD_SCK: u8 = 5;
+
+/// Platform structure abstracting a SPI peripheral specific to the Atmega328P
 pub struct Spi; 
 
 impl super::SpiTrait for Spi {

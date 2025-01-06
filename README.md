@@ -27,9 +27,13 @@ Pour tester sur un autre matériel : `cargo run --example usart --target thumb
 
 ## Documentation
 
-Pour générer la documentation : `cargo doc`.
+Le code est commenté. Pour générer la documentation au format HTML, il faut exécuter la commande `cargo doc` depuis le dossier racine du répertoire Git.
 
 Elle peut ensuite être trouvé dans le dossier `./target/avr-atmega328p/doc/tp1/index.html` (selon la target spécifiée).
+
+## Conventions
+
+Par soucis de simplicité, nous désignons (sauf mention contraire) par USART à la fois USART et UART.
 
 ## Organisation
 

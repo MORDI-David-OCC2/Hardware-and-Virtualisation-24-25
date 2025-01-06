@@ -1,5 +1,8 @@
-// Memory map of the STM32F1xx
-// All reserved peripherals were omitted.
+//! Memory map of the STM32F1xx
+//! 
+//! This module defines constants storing the address of each peripheral of
+//! the STM32F1 device.
+//! All reserved peripherals were omitted.
 
 // AHB Peripherals
 // AHB Peripherals are peripherals directly connected to the AHB bus.

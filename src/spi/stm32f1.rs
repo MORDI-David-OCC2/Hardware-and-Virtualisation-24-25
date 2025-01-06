@@ -1,9 +1,17 @@
+//! Allows the management of the SPI peripherals of any STM32F1 device
+
 use crate::{read_reg, write_reg};
 
-const SPI_CR1: u32 = 0x4001_3000; // Registre de contrôle 1
-const SPI_SR: u32 = 0x4001_3008;  // Registre d'état
-const SPI_DR: u32 = 0x4001_300C;  // Registre de données
+/// Registre de contrôle 1
+const SPI_CR1: u32 = 0x4001_3000;
 
+/// Registre d'état
+const SPI_SR: u32 = 0x4001_3008;
+
+/// Registre de données
+const SPI_DR: u32 = 0x4001_300C;
+
+/// Platform-specific structure abstracting a SPI peripheral.
 pub struct Spi;
 
 impl super::SpiTrait for Spi {

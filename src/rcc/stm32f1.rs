@@ -1,3 +1,5 @@
+//! Allows managing the RCC peripheral
+
 use crate::gpio::stm32f1::GpioPort;
 
 use crate::{read_reg, write_reg};
@@ -15,15 +17,18 @@ const RCC_APB1ENR: u32 = 0x1C;
 const RCC_BDCR: u32 = 0x20;
 const RCC_CSR: u32 = 0x24;
 
+/// Represents a RCC peripheral
 pub struct Rcc;
 
 impl Rcc {
+    /// Enable the specified port clock
     pub fn enable_gpio_port_clock(port: GpioPort) -> () {
         let bit = Self::get_bit(port);
         let previous_value = read_reg(AHB_RCC + RCC_APB2ENR);
         write_reg(AHB_RCC + RCC_APB2ENR, previous_value | 1 << bit);
     }
 
+    /// Enable the specified I2C
     pub fn enable_i2c(i2c_id: I2cId) -> () {
         let value = match i2c_id {
             I2cId::I2c1 => 1 << 21,
@@ -33,12 +38,14 @@ impl Rcc {
         write_reg(AHB_RCC + RCC_APB1ENR, read_reg(AHB_RCC + RCC_APB1ENR) | value);
     }
 
+    /// Disable the clock of the specified GPIO port
     pub fn disable_gpio_port_clock(port: GpioPort) -> () {
         let bit = Self::get_bit(port);
         let previous_value = read_reg(AHB_RCC + RCC_APB2ENR);
         write_reg(AHB_RCC + RCC_APB2ENR, previous_value & !(1 << bit));
     }
 
+    /// Get the bit position of the specified GPIO port
     fn get_bit(port: GpioPort) -> u8 {
         match port {
             GpioPort::A => 2,

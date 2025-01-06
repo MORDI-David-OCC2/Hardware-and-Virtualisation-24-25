@@ -37,7 +37,10 @@ pub enum UsartPeripheral {
 
 /// Structure used for interacting with one specific USART peripheral
 pub struct Usart {
+    /// The peripheral represented by the instance
     pub peripheral: UsartPeripheral,
+    
+    /// Whether or not to use 9 bit words
     pub use_9_bit_words: bool,
 }
 

@@ -13,34 +13,47 @@ const DDRB: u8 = 0x24;
 const PORTB: u8 = 0x25;
 const PINB: u8 = 0x23;
 
+/// Represents a GPIO peripheral
+/// 
+/// Each instance of this structure represents a GPIO peripheral, and allows
+/// interacting with it using its method. For instance:
+/// 
+/// ```
+/// let gpio = Gpio;
+/// gpio.set_pin_output(7);
+/// ```
 pub struct Gpio;
 
 impl super::GpioTrait for Gpio {
+    /// Configures a pin as output
+    /// 
     /// Fonction qui configure une broche comme sortie 
     fn set_pin_output(&self, pin: u8) {
         write_reg_8(DDRB, read_reg_8(DDRB) | (1 << pin));
     }
     
-    // La fonction prend en argument un numéro de broche du port B
-    // Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
-    // Le bit est mis à 1 ce qui configure la broche en sortie 
-    // Maj du registre DDRB 
+    /// Configures a pin as input
+    /// 
+    /// La fonction prend en argument un numéro de broche du port B
+    /// Lecture de la valeur actuelle de la broche et modification du bit correspondant à la broche donnée
+    /// Le bit est mis à 1 ce qui configure la broche en sortie 
+    /// Maj du registre DDRB 
     /// Fonction pour configurer une broche comme entrée
     fn set_pin_input(&self, pin: u8) {
         write_reg_8(DDRB, read_reg_8(DDRB) & !(1 << pin));
     }
     
-    /// Fonction pour mettre une broche à l'état haut 
+    /// Sets a pin high
     fn set_pin_high(&self, pin: u8) {
         write_reg_8(PORTB, read_reg_8(PORTB) | (1 << pin));
     }
     
-    /// Fonction pour mettre une broche à l'état bas 
+    /// Sets a pin low
     fn set_pin_low(&self, pin: u8) {
         write_reg_8(PORTB, read_reg_8(PORTB) & !(1 << pin));
     }
     
-    /// Fonction pour lire l'état d'une broche 
+    /// Reads the state of a pin
     fn read_pin(&self, pin: u8) -> bool {
         let value = (read_reg_8(PINB) & (1 << pin)) >> pin & 1;
         1 == value

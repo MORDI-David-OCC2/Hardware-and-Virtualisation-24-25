@@ -1,4 +1,4 @@
-//! Cette partie conerne le protocole usart pour la cible atmega328p
+//! Cette partie concerne le protocole usart pour la cible atmega328p
 
 use core::ptr::{read_volatile, write_volatile};
 use crate::usart::UsartTrait;
@@ -35,8 +35,8 @@ pub const ADD_UCSR0A: *mut u8 = 0xC0 as *mut u8;
 pub const UDRE0: u8 = 5;
 pub const ADD_UDR0: *mut u8 = 0xC6 as *mut u8;
 
-pub struct Usart {
-}
+/// Platform-specific implementation of the Usart trait.
+pub struct Usart;
 
 impl UsartTrait for Usart {
     /// Initialisation de l'USART
