@@ -1,14 +1,17 @@
 #![no_std]
 #![no_main]
 
-use tp1::rcc::Rcc;
+use panic_halt as _;
 use tp1::gpio::{Gpio, GpioTrait, GpioPort};
+use tp1::rcc::Rcc;
 
+#[cfg(target_arch = "arm")]
+use cortex_m_rt::entry;
+
+#[cfg(target_arch = "arm")]
 use stm32f1::stm32f103;
 
-use cortex_m_rt::entry; // Entry point attribute
-use panic_halt as _;    // Panic handler: halt on panic
-
+#[cfg(target_arch = "arm")]
 #[entry]
 fn main() -> ! {
     unsafe {
@@ -30,6 +33,17 @@ fn main() -> ! {
 
             delay(8_000_000); // Arbitrary delay for ~500ms
         }
+    }
+}
+
+#[cfg(target_arch = "avr")]
+#[no_mangle]
+fn main() -> ! {
+    unsafe {
+        Gpio::set_pin_output(5); //Utilisation de la fonction du module gpio
+        Gpio::set_pin_high(5); //Allume la broche 5 (exemple)
+
+        loop{}
     }
 }
 

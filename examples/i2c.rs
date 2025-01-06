@@ -5,7 +5,6 @@ use panic_halt as _; // Panic handler: halt on panic
 
 use tp1::gpio;
 use tp1::i2c::{I2c, I2cTrait};
-use tp1::rcc::Rcc;
 
 #[cfg(target_arch = "avr")]
 use tp1::i2c::atmega328p; // Module spécifique à l'ATmega328P
@@ -43,12 +42,12 @@ fn main() -> ! {
     i2c1.init();
 
     // 2. Read BME280 chip ID as a test
-    let chip_id = i2c1.read_register(BME280_ADDR, 0xD0); // 0xD0 is the "chip ID" register
+    let _chip_id = i2c1.read_register(BME280_ADDR, 0xD0); // 0xD0 is the "chip ID" register
     // hprintln!("BME280 Chip ID: {:#X}", chip_id);
 
     loop {
         // Example: Read temperature and other sensor data here
-        let temp_raw = i2c1.read_register_16(BME280_ADDR, 0xFA); // Temperature MSB starts at 0xFA
+        let _temp_raw = i2c1.read_register_16(BME280_ADDR, 0xFA); // Temperature MSB starts at 0xFA
 
         delay_ms(1000); // Wait 1 second
     }

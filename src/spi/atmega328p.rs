@@ -11,7 +11,7 @@ const DD_SCK: u8 = 5;  // SCK sur PB5
 
 pub struct Spi; 
 
-impl super::Spi for Spi {
+impl super::SpiTrait for Spi {
     fn init_master() {
         unsafe {
             // Configurer MOSI et SCK comme sorties

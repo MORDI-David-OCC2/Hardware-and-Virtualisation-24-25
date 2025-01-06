@@ -5,7 +5,7 @@ extern crate panic_halt; // Gestionnaire de panique
 
 extern crate tp1;
 
-use tp1::spi::{Spi, SpiImpl};
+use tp1::spi::{SpiTrait, SpiImpl};
 
 #[cfg(target_arch = "arm")]
 use cortex_m_rt::entry; // Point d'entrée pour Cortex-M7

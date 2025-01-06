@@ -40,7 +40,7 @@ pub struct Usart {
 
 impl UsartTrait for Usart {
     /// Initialisation de l'USART
-    fn initialize(&self)
+    fn init(&self)
     {
         // Ecriture des valeurs dans les registres
         unsafe {

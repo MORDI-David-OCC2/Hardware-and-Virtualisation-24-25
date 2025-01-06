@@ -1,9 +1,7 @@
-//! This module provides a trait for using USART module on different systems.
+//! This module provides an abstraction for interacting with a device’s
+//! USART/UART peripheral(s).
 
-#[cfg(target_arch = "avr")]
 pub mod atmega328p;
-
-#[cfg(target_arch = "arm")]
 pub mod stm32f1;
 
 pub trait UsartTrait {

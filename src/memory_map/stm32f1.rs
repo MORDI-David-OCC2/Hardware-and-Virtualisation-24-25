@@ -15,7 +15,7 @@ pub const AHB_SDIO: u32 = 0x4001_8000;
 
 // APB2
 // APB Peripherals are peripherals directly connected to the AP2 bus, also called
-// the high speed APB bus. Its clock frequency is limited to TODO
+// the high speed APB bus. Its clock frequency is limited to 72MHz.
 pub const APB2_TIM11_TIMER: u32 = 0x4001_5400;
 pub const APB2_TIM10_TIMER: u32 = 0x4001_5000;
 pub const APB2_TIM9_TIMER: u32 = 0x4001_4C00;
@@ -38,7 +38,7 @@ pub const APB2_AFIO: u32 = 0x4001_0000;
 
 // APB1
 // APB Peripherals are peripherals directly connected to the AP2 bus, also called
-// the low speed APB bus. Its clock frequency is limited to TODO
+// the low speed APB bus. Its clock frequency is limited to 36MHz.
 pub const APB1_DAC: u32 = 0x4000_7400;
 pub const APB1_PWR: u32 = 0x4000_7000;
 pub const APB1_BXCAN1: u32 = 0x4000_6400;

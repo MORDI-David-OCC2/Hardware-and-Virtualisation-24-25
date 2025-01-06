@@ -6,6 +6,8 @@
 
 #![no_std]
 
+#![allow(dead_code)]
+
 /// GPIO features
 pub mod gpio;
 
@@ -35,5 +37,19 @@ pub fn read_reg(addr: u32) -> u32 {
 pub fn write_reg(addr: u32, value: u32) {
     unsafe {
         (addr as *mut u32).write_volatile(value);
+    }
+}
+
+/// Read 8-bit register with 8-bit address
+pub fn read_reg_8(addr: u8) -> u8 {
+    unsafe {
+        (addr as *const u8).read_volatile()
+    }
+}
+
+/// Read 8-bit value at 8-bit address
+pub fn write_reg_8(addr: u8, value: u8) {
+    unsafe {
+        (addr as *mut u8).write_volatile(value);
     }
 }

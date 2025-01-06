@@ -1,5 +1,4 @@
-#![no_std]
-#![no_main]
+//! Provides a structure to interact with the Atmega328P SPI peripheral
 
 use core::ptr;
 
@@ -20,7 +19,9 @@ const TWSTA: u8 = 1 << 5;
 const TWSTO: u8 = 1 << 4; 
 const TWWC:  u8 = 1 << 3; 
 const TWEN:  u8 = 1 << 2; 
-const TWIE:  u8 = 1 << 0; 
+const TWIE:  u8 = 1 << 0;
+
+
 
 // Initialise le TWI en mode maître
 // Calcul de la valeur TWBR selon la formule du datasheet

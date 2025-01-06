@@ -1,13 +1,8 @@
-#![allow(dead_code)]
-
-#[cfg(target_arch = "avr")]
 pub mod atmega328p;
-
-#[cfg(target_arch = "arm")]
 pub mod stm32f1;
 
 // Définir un trait commun pour les fonctionnalités SPI
-pub trait Spi {
+pub trait SpiTrait {
     /// Initialiser SPI en tant que maître
     fn init_master();
     /// Initialiser SPI en tant qu'esclave
