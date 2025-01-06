@@ -1,29 +1,17 @@
 # Rust HAL
 
-Ceci est notre HAL, c’est-à-dire une bibliothèque destinée à l’embarquée, qui
-permet d’utiliser les fonctionnalités des microcontroleurs de la même manière,
-indépendamment de la plateforme utilisé.
+This is our HAL, a Rust library aimed at allowing embedded software developers to leverage the capabilities of their hardware by providing a common abstraction.
 
-Pour l’instant, notre HAL propose les fonctionnalités suivantes :
+So far, our HAL supports the following features:
 
  - GPIO
  - USART
  - SPI
  - I2C
 
-Des exemples sont fournis pour chaque fonctionnalité. Pour avoir plus d’information, se référer à la partie [*Exemples*](#exemples).
+Examples are provided to show use cases as well as to explain how to use the library. More details are available in [*Exemples*](#exemples).
 
-Il est possible d’executer les exemples sans matériel, grâce à QEMU ou à Renode. La procédure à suivre est détaillée dans la section correspondante.
-
-## Exemples
-
-Des exemples sont fournis pour chaque fonctionnalité. Ils se trouvent dans le dossier `examples`.
-
-Pour les compiler, il faut spécifier à Cargo l’exemple et la target désirés.
-
-Par exemple :
-
-    cargo build --example i2c --target thumbv7m-none-eabi
+It is possible to run the examples with an emulator such as QEMU or Renode. More details are available in 
 
 ## Supported targets
 
@@ -32,17 +20,7 @@ So far, the following targets are supported:
  - The Atmega328P MCU
  - The STM32F1xxxx MCU family (running on the Cortex-M3 CPU)
 
-### Reasons for choosing the STM32F1 MCU family
-
 The main reason for choosing the STM32F1 family of MCUs is that they run on the Cortex-M3, which is better supported by Rust than the Atmega328P. In addition, they are supported by Renode, an emulation tool that provides a more streamlined workflow and more advanced features than QEMU. For instance, we can define our own peripherals in C#, connect additional devices to any microcontroller, see the connection status and the exchanged data, etc.
-
-## Docker and Dev Containers
-
-The **development environment** used for this project can be run using Docker. Docker is a virtualization software that can be downloaded for free on [their official website](https://docker.com).
-
-Using VS Code, this process can be even more automated! If Docker and VS Code are installed, and the Docker deamon is started (e.g. by running Docker Desktop on Windows) then opening the repository will give a prompt from VS Code offering to switch to the Dev Container. This means it will be possible to run VS Code extensions as well as commands in the terminal in a Linux virtual machine equipped with Rust, Cargo, Rustup, as well as any other dependency!
-
-
 
 ## Installing the dependencies / running the development environment
 
@@ -62,20 +40,33 @@ The end result is that VS Code, while running on your host computer, runs as if 
 
 If you do not want to use a Dev Container, you can read the `Dockerfile` file and see what software needs to be installed, and how it is installed.
 
+## Exemples
 
-## Test for the Atmega328P
+Examples are provided in the `examples/` folder. They showcase how to use the library to use specific features: I2C, SPI, USART and GPIO.
 
-Pour un exemple d’utilisation de l’USART, lancer `cargo run --example usart` depuis un terminal, et `telnet localhost 5678` depuis un autre. Tous les messages que vous enverrez (avec la touche « Entrée ») vous seront retransmis.
+### Building the example
 
-Pour tester sur un autre matériel : `cargo run --example usart --target thumbv7m-none-eabi`.
+Building an example is veary simple. The example and the target must be specified when invoking `cargo build`. For instance:
+
+    cargo build --example gpio --target thumbv7m-none-eabi
+
+### Running the example
+
+#### For the Atmega328P
+
+QEMU is used to emulate the Atmega328P. It can be used to run the examples without hardware.
+
+Run `cargo run --example usart --target atmega328p.json` from one terminal, and `telnet localhost 5678` from another. All the characters you send will be sent back to you over USART.
 
 ## Test for the STM32F1
 
-The STM32F1 target was chosen because it is supported by Renode. Renode is already installed in the Dev Container. If you are not using the Dev Container you need to install it.
+The STM32F1 target was chosen because it is supported by **Renode**.
 
 Renode is a very, very useful software for testing embedded software. It is very easy to extend, or to define complex configurations with multiple devices attached to the same MCU.
 
-You first need to build the project. For instance, for the I2C, `cargo build --example i2c --target thumbv7m-none-eabi`.
+Renode is already installed in the Dev Container. If you are not using the Dev Container you need to install it.
+
+You first need to build an example for the STM32F1. For instance, for the I2C, `cargo build --example i2c --target thumbv7m-none-eabi`.
 
 Then, run Renode:
 
@@ -97,32 +88,30 @@ For the USART, the same prodecure can be followed, but once Renode stalls, a sec
 
 ## Documentation
 
-Le code est commenté. Pour générer la documentation au format HTML, il faut exécuter la commande `cargo doc` depuis le dossier racine du répertoire Git.
-
-Elle peut ensuite être trouvé dans le dossier `./target/avr-atmega328p/doc/tp1/index.html` (selon la target spécifiée).
+The code is commented. To generate documentation in HTML format, run the `cargo doc` command from the root folder of the Git directory.
+It can then be found in the `./target/avr-atmega328p/doc/tp1/index.html` folder (depending on the target specified).
 
 ## Conventions
 
-Par soucis de simplicité, nous désignons (sauf mention contraire) par USART à la fois USART et UART.
+For the sake of simplicity, we use the term USART to mean both USART and UART (unless otherwise stated).
 
 ## Organisation
 
-Le package contient une crate qui fournit un hal pour l’Atmega328P.
+The package contains a crate that provides a hal for the Atmega328P.
 
-L’organisation est la suivante :
+The organization is as follows:
 
- - `.cargo/config.toml`, `Cargo.toml` et `rust-toolchain.toml` : contient la configuration automatique pour compiler et lancer le programme (choix de la toolchain, manière de lancer le programme, target, `core`…). **Pour changer la target par défaut**, il faut se rendre dans `.cargo/config.toml` and commenter / décommenter la ligne correspondante dans `[build]`.
- - `.devcontainer`: contient la configuration permettant à l’IDE, par exemple VS Code, d’ouvrir le projet dans une machine virtuelle, permettant d’utiliser une configuration identique définie par le projet, avec les bons logiciels installés, les bonnes extensions, et la possibilité d’exécuter les commandes dans l’environnement virtuel.
- - `.vscode`: contient la configuration recommandée pour VS Code pour le projet.
- - `examples/` : montre un exemple de l’utilisation d’USART, de SPI, d’I2C, de GPIO, avec notre bibliothèque.
- - `images/`: images pour le README.
- - `renode/`: platform descriptions and scripts for testing for the STM32F1 with Renode
+ - `.cargo/config.toml`, `Cargo.toml` and `rust-toolchain.toml`: contains the automatic configuration for compiling and launching the program (choice of toolchain, how to launch the program, target, `core`...). **To change the default target**, go to `.cargo/config.toml` and comment/uncomment the corresponding line in `[build]`.
+ - `.devcontainer`: contains the configuration enabling the IDE, e.g. VS Code, to open the project in a virtual machine, allowing the use of an identical configuration defined by the project, with the right software installed, the right extensions, and the ability to execute commands in the virtual environment.
+ - `.vscode`: contains the recommended VS Code configuration for the project.
+ - `examples/`: shows an example of the use of USART, SPI, I2C, GPIO, with our library.
+ - images/`: images for README.
+ - `renode/`: platform descriptions and scripts for testing for the STM32F1 with Renode
  - `resources`: datasheets, referenc manuals
- - `src` : contient notre HAL sous forme de Crate library.
- - `avr-atmega328p.json` : contient la configuration personnalisée que nous utilisons pour l’Atmega328P.
+ - `src`: contains our HAL as a Crate library.
+ - `avr-atmega328p.json`: contains the custom configuration we use for the Atmega328P.
  - `Dockerfile`, `docker-compose.yml`: used for building the Dev Container
- - `memory.x`: used by the linker for compiling for the STM32F1
-
+ - memory.x`: used by the linker for compiling for the STM32F1
 
 ## Corrections
 
