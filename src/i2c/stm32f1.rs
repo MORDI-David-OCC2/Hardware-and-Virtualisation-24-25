@@ -61,19 +61,19 @@ impl I2cTrait for I2c {
     }
 }
 
-impl  I2c {
-    fn get_offset(&self) -> u32 {
+impl I2c {
+    pub fn get_offset(&self) -> u32 {
         match self.id {
             I2cId::I2c1 => APB1_I2C1,
             I2cId::I2c2 => APB1_I2C2,
         }
     }
 
-    fn get_reg_addr(&self, reg_offset: u32) -> u32 {
+    pub fn get_reg_addr(&self, reg_offset: u32) -> u32 {
         return self.get_offset() + reg_offset;
     }
 
-    fn i2c_write_byte(&self, byte: u8) {
+    pub fn i2c_write_byte(&self, byte: u8) {
         // Write byte to data register
         write_reg(self.get_reg_addr(I2C_DR), byte as u32);
 
@@ -81,7 +81,7 @@ impl  I2c {
         while read_reg(self.get_reg_addr(I2C_SR1)) & (1 << 7) == 0 {}
     }
 
-    fn i2c_read_byte(&self) -> u8 {
+    pub fn i2c_read_byte(&self) -> u8 {
         // Wait for RXNE flag
         while read_reg(self.get_reg_addr(I2C_SR1)) & (1 << 6) == 0 {}
 
@@ -89,7 +89,7 @@ impl  I2c {
     }
 
     // Function to write to a register
-    fn write_register(&self, slave_addr: u8, reg: u8, value: u8) {
+    pub fn write_register(&self, slave_addr: u8, reg: u8, value: u8) {
         self.start();
         self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
         self.i2c_write_byte(reg);
@@ -98,7 +98,7 @@ impl  I2c {
     }
 
     // Function to read a register (8-bit data)
-    fn read_register(&self, slave_addr: u8, reg: u8) -> u8 {
+    pub fn read_register(&self, slave_addr: u8, reg: u8) -> u8 {
         self.start();
         self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
         self.i2c_write_byte(reg);
@@ -110,7 +110,7 @@ impl  I2c {
     }
 
     // Function to read a 16-bit value
-    fn read_register_16(&self, slave_addr: u8, reg: u8) -> u16 {
+    pub fn read_register_16(&self, slave_addr: u8, reg: u8) -> u16 {
         self.start();
         self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
         self.i2c_write_byte(reg);

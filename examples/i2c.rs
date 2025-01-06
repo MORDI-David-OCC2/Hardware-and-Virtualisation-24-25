@@ -28,8 +28,8 @@ fn main() -> ! {
     let gpio_b = gpio::Gpio{port: gpio::GpioPort::B};
     unsafe {
         gpio_b.init();
-        gpio_b.set_pin_to_output(gpio::Pin::Pin6, gpio::PinOutputCnf::AlternateFunctionOutputOpenDrain, gpio::PinOutputMode::MaxSpeed2MHZ);
-        gpio_b.set_pin_to_output(gpio::Pin::Pin7, gpio::PinOutputCnf::AlternateFunctionOutputOpenDrain, gpio::PinOutputMode::MaxSpeed2MHZ);
+        gpio_b.set_pin_to_output(6, gpio::PinOutputCnf::AlternateFunctionOutputOpenDrain, gpio::PinOutputMode::MaxSpeed2MHZ);
+        gpio_b.set_pin_to_output(7, gpio::PinOutputCnf::AlternateFunctionOutputOpenDrain, gpio::PinOutputMode::MaxSpeed2MHZ);
     }
 
     #[cfg(target_arch = "arm")]

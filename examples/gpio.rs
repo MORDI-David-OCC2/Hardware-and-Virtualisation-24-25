@@ -31,12 +31,12 @@ fn main() -> ! {
             // Turn LED on (PC13 is active low, so set PC13 to 0)
             gpio.set_pin_high(13);
 
-            delay(8_000_000); // Arbitrary delay for ~500ms
+            tp1::timers::delay_ms(8_000_000);
 
             // Turn LED off (set PC13 to 1)
             gpio.set_pin_low(13);
 
-            delay(8_000_000); // Arbitrary delay for ~500ms
+            tp1::timers::delay_ms(8_000_000);
         }
     }
 }
