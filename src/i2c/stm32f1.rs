@@ -46,38 +46,18 @@ impl I2cTrait for I2c {
         write_reg(self.get_reg_addr(I2C_CR1), 1);
     }
 
-    // Function to write to a register
-    fn write_register(&self, slave_addr: u8, reg: u8, value: u8) {
-        self.i2c_start();
-        self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
-        self.i2c_write_byte(reg);
-        self.i2c_write_byte(value);
-        self.i2c_stop();
+    // Helper functions for I2C communication
+    fn start(&self) {
+        // Generate START condition
+        write_reg(self.get_reg_addr(I2C_CR1), read_reg(self.get_reg_addr(I2C_CR1)) | (1 << 8));
+
+        // Wait for SB flag
+        while read_reg(self.get_reg_addr(I2C_SR1)) & (1 << 0) == 0 {}
     }
 
-    // Function to read a register (8-bit data)
-    fn read_register(&self, slave_addr: u8, reg: u8) -> u8 {
-        self.i2c_start();
-        self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
-        self.i2c_write_byte(reg);
-        self.i2c_start();
-        self.i2c_write_byte((slave_addr << 1) | 0x01); // Read mode
-        let value = self.i2c_read_byte();
-        self.i2c_stop();
-        value
-    }
-
-    // Function to read a 16-bit value
-    fn read_register_16(&self, slave_addr: u8, reg: u8) -> u16 {
-        self.i2c_start();
-        self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
-        self.i2c_write_byte(reg);
-        self.i2c_start();
-        self.i2c_write_byte((slave_addr << 1) | 0x01); // Read mode
-        let msb = self.i2c_read_byte();
-        let lsb = self.i2c_read_byte();
-        self.i2c_stop();
-        ((msb as u16) << 8) | (lsb as u16)
+    fn stop(&self) {
+        // Generate STOP condition
+        write_reg(self.get_reg_addr(I2C_CR1), read_reg(self.get_reg_addr(I2C_CR1)) | (1 << 9));
     }
 }
 
@@ -93,20 +73,6 @@ impl  I2c {
         return self.get_offset() + reg_offset;
     }
 
-    // Helper functions for I2C communication
-    fn i2c_start(&self) {
-        // Generate START condition
-        write_reg(self.get_reg_addr(I2C_CR1), read_reg(self.get_reg_addr(I2C_CR1)) | (1 << 8));
-
-        // Wait for SB flag
-        while read_reg(self.get_reg_addr(I2C_SR1)) & (1 << 0) == 0 {}
-    }
-
-    fn i2c_stop(&self) {
-        // Generate STOP condition
-        write_reg(self.get_reg_addr(I2C_CR1), read_reg(self.get_reg_addr(I2C_CR1)) | (1 << 9));
-    }
-
     fn i2c_write_byte(&self, byte: u8) {
         // Write byte to data register
         write_reg(self.get_reg_addr(I2C_DR), byte as u32);
@@ -120,5 +86,39 @@ impl  I2c {
         while read_reg(self.get_reg_addr(I2C_SR1)) & (1 << 6) == 0 {}
 
         read_reg(self.get_reg_addr(I2C_SR1)) as u8
+    }
+
+    // Function to write to a register
+    fn write_register(&self, slave_addr: u8, reg: u8, value: u8) {
+        self.start();
+        self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
+        self.i2c_write_byte(reg);
+        self.i2c_write_byte(value);
+        self.stop();
+    }
+
+    // Function to read a register (8-bit data)
+    fn read_register(&self, slave_addr: u8, reg: u8) -> u8 {
+        self.start();
+        self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
+        self.i2c_write_byte(reg);
+        self.start();
+        self.i2c_write_byte((slave_addr << 1) | 0x01); // Read mode
+        let value = self.i2c_read_byte();
+        self.stop();
+        value
+    }
+
+    // Function to read a 16-bit value
+    fn read_register_16(&self, slave_addr: u8, reg: u8) -> u16 {
+        self.start();
+        self.i2c_write_byte((slave_addr << 1) & 0xFE); // Write mode
+        self.i2c_write_byte(reg);
+        self.start();
+        self.i2c_write_byte((slave_addr << 1) | 0x01); // Read mode
+        let msb = self.i2c_read_byte();
+        let lsb = self.i2c_read_byte();
+        self.stop();
+        ((msb as u16) << 8) | (lsb as u16)
     }
 }

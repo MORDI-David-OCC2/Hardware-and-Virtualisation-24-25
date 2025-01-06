@@ -1,5 +1,3 @@
-use core::ptr;
-
 use crate::{read_reg, write_reg};
 
 const SPI_CR1: u32 = 0x4001_3000; // Registre de contrôle 1

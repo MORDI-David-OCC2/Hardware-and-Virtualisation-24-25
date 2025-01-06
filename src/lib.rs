@@ -23,6 +23,9 @@ pub mod rcc;
 /// SPI features
 pub mod spi;
 
+/// Timer features
+pub mod timers;
+
 /// USART/UART features
 pub mod usart;
 

@@ -49,30 +49,24 @@ fn main() -> ! {
         // Example: Read temperature and other sensor data here
         let _temp_raw = i2c1.read_register_16(BME280_ADDR, 0xFA); // Temperature MSB starts at 0xFA
 
-        delay_ms(1000); // Wait 1 second
-    }
-}
-
-// Delay function (busy wait)
-// TODO Remove
-fn delay_ms(count: u32) {
-    for _ in 0..count*8000 {
-        // Simple busy-wait loop
-        unsafe { core::arch::asm!("nop") }
+        tp1::timers::delay_ms(1000); // Wait 1 second
     }
 }
 
 #[cfg(target_arch = "avr")]
 #[no_mangle]
 pub extern "C" fn main() -> ! {
-    atmega328p::twi_init(100_000); // Initialise le TWI à 100 kHz
+    use tp1::i2c::I2c;
 
-    if atmega328p::twi_start() {
-        if atmega328p::twi_write(0x50 << 1) { // Adresse périphérique (écriture)
-            atmega328p::twi_write(0x00); // Envoyer un registre
-            atmega328p::twi_write(0x42); // Envoyer des données
+    let i2c = I2c;
+    i2c.init(); // Initialise le TWI à 100 kHz
+
+    if i2c.twi_start() {
+        if i2c.twi_write(0x50 << 1) { // Adresse périphérique (écriture)
+            i2c.twi_write(0x00); // Envoyer un registre
+            i2c.twi_write(0x42); // Envoyer des données
         }
-        atmega328p::twi_stop();
+        i2c.stop();
     }
 
     loop {}

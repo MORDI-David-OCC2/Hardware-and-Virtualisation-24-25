@@ -2,8 +2,13 @@
 #![no_main]
 
 use panic_halt as _;
-use tp1::gpio::{Gpio, GpioTrait, GpioPort};
+use tp1::gpio::{Gpio, GpioTrait};
+
+#[cfg(target_arch = "arm")]
 use tp1::rcc::Rcc;
+
+#[cfg(target_arch = "arm")]
+use tp1::gpio::stm32f1::GpioPort;
 
 #[cfg(target_arch = "arm")]
 use cortex_m_rt::entry;
@@ -39,19 +44,9 @@ fn main() -> ! {
 #[cfg(target_arch = "avr")]
 #[no_mangle]
 fn main() -> ! {
-    unsafe {
-        Gpio::set_pin_output(5); //Utilisation de la fonction du module gpio
-        Gpio::set_pin_high(5); //Allume la broche 5 (exemple)
+    let gpio = Gpio;
+    gpio.set_pin_output(5); //Utilisation de la fonction du module gpio
+    gpio.set_pin_high(5); //Allume la broche 5 (exemple)
 
-        loop{}
-    }
-}
-
-// Delay function (busy wait)
-// TODO Remove
-fn delay(count: u32) {
-    for _ in 0..count {
-        // Simple busy-wait loop
-        unsafe { core::arch::asm!("nop") }
-    }
+    loop{}
 }
