@@ -1,17 +1,34 @@
 # Rust HAL
 
-Ceci est notre HAL, qui permet d’utiliser les fonctionnalités suivantes :
+Ceci est notre HAL, c’est-à-dire une bibliothèque destinée à l’embarquée, qui
+permet d’utiliser les fonctionnalités des microcontroleurs de la même manière,
+indépendamment de la plateforme utilisé.
 
- - GPIO (`examples/gpio.rs`)
- - USART (`examples/usart.rs`)
- - SPI (`examples/spi.rs`)
+Pour l’instant, notre HAL propose les fonctionnalités suivantes :
 
-La bibliothèque détecte automatiquement la target spécifiée pour la compilation et adapte le code en fonction. Par conséquent, il n’est pas nécessaire de spécifier de *features*.
+ - GPIO
+ - USART
+ - SPI
+ - I2C
+
+Des exemples sont fournis pour chaque fonctionnalité. Pour avoir plus d’information, se référer à la partie [*Exemples*](#exemples).
+
+## Exemples
+
+Des exemples sont fournis pour chaque fonctionnalité. Ils se trouvent dans le dossier `examples`.
+
+Pour les compiler, il faut spécifier à Cargo l’exemple et la target désirés.
+
+Par exemple :
+
+    cargo build --example i2c --target thumbv7m-none-eabi
 
 ## Target support
 
- - Atmega328P MCU
- - STM32F1xxxx MCU family (Cortex-M3)
+So far, the following platforms are supported:
+
+ - The Atmega328P MCU
+ - The STM32F1xxxx MCU family (running on the Cortex-M3 CPU)
 
 ## Installer les dépendances
 
