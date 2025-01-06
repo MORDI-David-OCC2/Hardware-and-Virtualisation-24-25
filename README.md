@@ -69,3 +69,9 @@ telnet localhost 5678
 [CORRECTION USART] (Don't hesitate to remove this part)
 Very complete project. It is nice that you used traits.
 You could try implementing other mode, like asynchrone double speed for the atmega for example.
+
+[CORRECTION SPI] (Don't hesitate to remove this part)
+Still very complete. 
+You could eventually add some element (this is just some ideas to make it even more perfect, nothing mandatory of course) :
+- Abstract your features even more, to support LSB or MSB first data transfer for example.
+- Add some safety, for example, you could ensure the master/controler correctly set the clock before enabling the different slave/peripheral.

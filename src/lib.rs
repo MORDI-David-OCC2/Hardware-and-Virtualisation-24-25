@@ -24,12 +24,14 @@ pub mod spi;
 /// USART/UART features
 pub mod usart;
 
+/// Read 32-bit register with 32-bit address
 pub fn read_reg(addr: u32) -> u32 {
     unsafe {
         (addr as *const u32).read_volatile()
     }
 }
 
+/// Read 32-bit value at 32-bit address
 pub fn write_reg(addr: u32, value: u32) {
     unsafe {
         (addr as *mut u32).write_volatile(value);

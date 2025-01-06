@@ -1,3 +1,4 @@
+pub mod atmega328p;
 pub mod stm32f1;
 
 pub trait I2cTrait {
