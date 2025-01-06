@@ -12,13 +12,13 @@ pub trait GpioTrait {
     // Maj du registre DDRB 
     
     /// Fonction pour configurer une broche comme entrée
-    unsafe fn set_pin_input(&self, pin: u8);
+    unsafe fn set_pin_input(&self, pin: u8) -> ();
     
     /// Fonction pour mettre une broche à l'état haut 
-    unsafe fn set_pin_high(&self, pin: u8);
+    unsafe fn set_pin_high(&self, pin: u8) -> ();
     
     /// Fonction pour mettre une broche à l'état bas 
-    unsafe fn set_pin_low(&self, pin: u8);
+    unsafe fn set_pin_low(&self, pin: u8) -> ();
     
     /// Fonction pour lire l'état d'une broche 
     unsafe fn read_pin(&self, pin: u8) -> bool;
@@ -28,4 +28,10 @@ pub trait GpioTrait {
 pub use atmega328p::Gpio as Gpio;
 
 #[cfg(target_arch = "arm")]
-pub use stm32f1::{Gpio as Gpio, GpioPort as GpioPort};
+pub use stm32f1::{
+    Gpio as Gpio,
+    GpioPort as GpioPort,
+    Pin as Pin,
+    PinOutputCnf,
+    PinOutputMode,
+};

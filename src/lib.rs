@@ -9,6 +9,9 @@
 /// GPIO features
 pub mod gpio;
 
+/// I2C
+pub mod i2c;
+
 /// Target-specific memory map constants
 pub mod memory_map;
 

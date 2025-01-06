@@ -1,0 +1,14 @@
+mach create "stm32f103"
+machine LoadPlatformDescription @renode/stm32f103.repl
+logLevel -1
+
+$bin?=@target/thumbv7m-none-eabi/debug/examples/gpio
+
+macro reset
+"""
+    sysbus LoadELF $bin
+"""
+
+runMacro $reset
+
+start

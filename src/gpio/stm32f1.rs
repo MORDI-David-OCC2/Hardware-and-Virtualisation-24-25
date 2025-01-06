@@ -3,7 +3,7 @@
 
 // Load memory map constants
 use crate::memory_map::stm32f1 as map;
-use crate::rcc;
+use crate::{rcc, read_reg, write_reg};
 
 const GPIO_CRL: u32 = 0x00;
 const GPIO_CRH: u32 = 0x04;
@@ -22,6 +22,44 @@ pub enum GpioPort {
     E,
     F,
     G,
+}
+
+pub enum GpioInput {
+    Analog,
+    FloatingInput,
+    PullUpPullDownInput,
+}
+
+pub enum PinOutputCnf {
+    GeneralPurposeOutputPushPull,
+    GeneralPurposeOutputOpenDrain,
+    AlternateFunctionOutputPushPull,
+    AlternateFunctionOutputOpenDrain,
+}
+
+pub enum PinOutputMode {
+    MaxSpeed10MHZ,
+    MaxSpeed2MHZ,
+    MaxSpeed50MHZ,
+}
+
+pub enum Pin {
+    Pin0,
+    Pin1,
+    Pin2,
+    Pin3,
+    Pin4,
+    Pin5,
+    Pin6,
+    Pin7,
+    Pin8,
+    Pin9,
+    Pin10,
+    Pin11,
+    Pin12,
+    Pin13,
+    Pin14,
+    Pin15,
 }
 
 pub struct Gpio {
@@ -60,6 +98,57 @@ impl Gpio {
         value &= !(0b1111 << first_bit_position); // Clear CNF13[1:0] and MODE13[1:0]
         value |= if set {0b0010 << first_bit_position} else {0b1000 << first_bit_position};  // Set MODE13 to Output mode, max speed 2 MHz
         core::ptr::write_volatile(address, value);
+    }
+
+    ///
+    /// ## Todo
+    /// [ ] Allow editing of multiple pins of the same register at the same time
+    /// [ ] Similar function for input
+    pub fn set_pin_to_output(&self, pin: Pin, cnf: PinOutputCnf, mode: PinOutputMode) -> () {
+        let pin_no = Self::get_pin_no(pin);
+        let reg_addr = self.get_offset() + match pin_no {
+            pin_no if pin_no <= 7 => GPIO_CRL,
+            pin_no if pin_no > 7 => GPIO_CRH,
+            _ => panic!(),
+        };
+
+        let cnf_binary = match cnf {
+            PinOutputCnf::GeneralPurposeOutputPushPull => 0b00,
+            PinOutputCnf::GeneralPurposeOutputOpenDrain => 0b01,
+            PinOutputCnf::AlternateFunctionOutputPushPull => 0b10,
+            PinOutputCnf::AlternateFunctionOutputOpenDrain => 0b11,
+        };
+        let mode_binary =  match mode {
+            PinOutputMode::MaxSpeed10MHZ => 0b01,
+            PinOutputMode::MaxSpeed2MHZ => 0b10,
+            PinOutputMode::MaxSpeed50MHZ => 0b11,
+        };
+
+        let bit_shift = pin_no % 8 * 4;
+        let reg_val = read_reg(reg_addr) & !(0b1111 << bit_shift) | mode_binary << bit_shift | cnf_binary << bit_shift + 2;
+
+        write_reg(reg_addr, reg_val);
+    }
+
+    pub fn get_pin_no(pin: Pin) -> u8 {
+        match pin {
+            Pin::Pin0 => 0,
+            Pin::Pin1 => 1,
+            Pin::Pin2 => 2,
+            Pin::Pin3 => 3,
+            Pin::Pin4 => 4,
+            Pin::Pin5 => 5,
+            Pin::Pin6 => 6,
+            Pin::Pin7 => 7,
+            Pin::Pin8 => 8,
+            Pin::Pin9 => 9,
+            Pin::Pin10 => 10,
+            Pin::Pin11 => 11,
+            Pin::Pin12 => 12,
+            Pin::Pin13 => 13,
+            Pin::Pin14 => 14,
+            Pin::Pin15 => 15,
+        }
     }
 }   
 
